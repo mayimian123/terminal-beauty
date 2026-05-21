@@ -1,0 +1,35 @@
+# terminal-beauty: Rosé Pine
+add_newline = true
+
+format = """
+[](#c4a7e7)\
+$directory\
+[](fg:#c4a7e7 bg:#eb6f92)\
+$git_branch\
+$git_status\
+[](fg:#eb6f92 bg:#6e6a86)\
+$cmd_duration\
+[ ](fg:#6e6a86)\
+$character"""
+
+[directory]
+style = "fg:#191724 bg:#c4a7e7"
+format = "[ $path ]($style)"
+truncation_length = 3
+
+[git_branch]
+symbol = ""
+style = "fg:#191724 bg:#eb6f92"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:#191724 bg:#eb6f92"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+style = "fg:#e0def4 bg:#6e6a86"
+format = "[  $duration ]($style)"
+
+[character]
+success_symbol = "[❯](bold #9ccfd8)"
+error_symbol = "[❯](bold #eb6f92)"

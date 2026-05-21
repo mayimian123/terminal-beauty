@@ -1,0 +1,35 @@
+# terminal-beauty: Dracula
+add_newline = true
+
+format = """
+[](#bd93f9)\
+$directory\
+[](fg:#bd93f9 bg:#ff79c6)\
+$git_branch\
+$git_status\
+[](fg:#ff79c6 bg:#6272a4)\
+$cmd_duration\
+[ ](fg:#6272a4)\
+$character"""
+
+[directory]
+style = "fg:#282a36 bg:#bd93f9"
+format = "[ $path ]($style)"
+truncation_length = 3
+
+[git_branch]
+symbol = ""
+style = "fg:#282a36 bg:#ff79c6"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:#282a36 bg:#ff79c6"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+style = "fg:#f8f8f2 bg:#6272a4"
+format = "[  $duration ]($style)"
+
+[character]
+success_symbol = "[❯](bold #50fa7b)"
+error_symbol = "[❯](bold #ff5555)"

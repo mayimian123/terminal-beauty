@@ -1,0 +1,35 @@
+# terminal-beauty: Solarized Dark
+add_newline = true
+
+format = """
+[](#268bd2)\
+$directory\
+[](fg:#268bd2 bg:#d33682)\
+$git_branch\
+$git_status\
+[](fg:#d33682 bg:#073642)\
+$cmd_duration\
+[ ](fg:#073642)\
+$character"""
+
+[directory]
+style = "fg:#002b36 bg:#268bd2"
+format = "[ $path ]($style)"
+truncation_length = 3
+
+[git_branch]
+symbol = ""
+style = "fg:#002b36 bg:#d33682"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:#002b36 bg:#d33682"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+style = "fg:#839496 bg:#073642"
+format = "[  $duration ]($style)"
+
+[character]
+success_symbol = "[❯](bold #859900)"
+error_symbol = "[❯](bold #dc322f)"

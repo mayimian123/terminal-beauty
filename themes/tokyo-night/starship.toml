@@ -1,0 +1,35 @@
+# terminal-beauty: Tokyo Night
+add_newline = true
+
+format = """
+[](#7aa2f7)\
+$directory\
+[](fg:#7aa2f7 bg:#bb9af7)\
+$git_branch\
+$git_status\
+[](fg:#bb9af7 bg:#414868)\
+$cmd_duration\
+[ ](fg:#414868)\
+$character"""
+
+[directory]
+style = "fg:#1a1b26 bg:#7aa2f7"
+format = "[ $path ]($style)"
+truncation_length = 3
+
+[git_branch]
+symbol = ""
+style = "fg:#1a1b26 bg:#bb9af7"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:#1a1b26 bg:#bb9af7"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+style = "fg:#c0caf5 bg:#414868"
+format = "[  $duration ]($style)"
+
+[character]
+success_symbol = "[❯](bold #9ece6a)"
+error_symbol = "[❯](bold #f7768e)"

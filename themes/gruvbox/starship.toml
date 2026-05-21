@@ -1,0 +1,35 @@
+# terminal-beauty: Gruvbox Dark
+add_newline = true
+
+format = """
+[](#458588)\
+$directory\
+[](fg:#458588 bg:#b16286)\
+$git_branch\
+$git_status\
+[](fg:#b16286 bg:#928374)\
+$cmd_duration\
+[ ](fg:#928374)\
+$character"""
+
+[directory]
+style = "fg:#282828 bg:#458588"
+format = "[ $path ]($style)"
+truncation_length = 3
+
+[git_branch]
+symbol = ""
+style = "fg:#282828 bg:#b16286"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:#282828 bg:#b16286"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+style = "fg:#ebdbb2 bg:#928374"
+format = "[  $duration ]($style)"
+
+[character]
+success_symbol = "[❯](bold #98971a)"
+error_symbol = "[❯](bold #fb4934)"
