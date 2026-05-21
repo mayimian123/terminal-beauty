@@ -18,6 +18,7 @@
 
 [主题预览](https://mayimian123.github.io/terminal-beauty/) ·
 [30 秒上手](#30-秒上手) ·
+[Beta 说明](#beta-说明) ·
 [它做了什么](#它做了什么) ·
 [Apple Terminal 和 Starship](#apple-terminal-和-starship) ·
 [自定义风格](#自定义风格) ·
@@ -52,6 +53,24 @@
 安装脚本不会删除备份，也不会在没有明确同意的情况下安装新工具。
 
 </details>
+
+---
+
+## Beta 说明
+
+当前版本是 `v1.0.0-beta.1`，建议先给熟悉 macOS 的朋友小范围试用。
+
+V1 beta 聚焦：
+
+- Apple Terminal 默认路径
+- Starship prompt
+- 8 套精选主题
+- 自定义风格 brief
+- 自动备份、自动导入、可回滚
+
+暂不覆盖 Windows、VS Code terminal、Warp、Alacritty、云同步或网页直接修改本地配置。
+
+给朋友试用可以直接发：[TRY.md](TRY.md)
 
 ---
 
