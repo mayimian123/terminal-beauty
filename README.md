@@ -19,6 +19,7 @@
 [主题预览](https://mayimian123.github.io/terminal-beauty/) ·
 [30 秒上手](#30-秒上手) ·
 [它做了什么](#它做了什么) ·
+[Apple Terminal 和 Starship](#apple-terminal-和-starship) ·
 [安全与回滚](#安全与回滚) ·
 [English](#english)
 
@@ -68,6 +69,23 @@
 - Starship：替换 `starship.toml`
 - fish：写入 fish 启动配置
 - iTerm2：提供可导入的 `.itermcolors` 配色文件
+
+## Apple Terminal 和 Starship
+
+如果你使用的是 macOS 自带的 Terminal，不需要为了这个项目额外下载 iTerm2。
+
+这里有两层效果：
+
+- **Apple Terminal Profile**：控制窗口背景色、文字色、光标色和基础 16 色。
+- **Starship**：控制命令行提示符，也就是目录、git 分支、执行时间这些分段样式。
+
+所以，Apple Terminal + Starship 可以实现预览图里最明显的高级 prompt 效果；窗口配色部分则需要 Apple Terminal Profile 支持，或者在 Terminal 设置里手动调整。
+
+安装 Starship：
+
+```bash
+brew install starship
+```
 
 ## 为什么不是只放 8 套模板
 
@@ -222,6 +240,9 @@ Then it applies the selected theme where supported:
 - Starship: writes `~/.config/starship.toml`
 - fish: writes `~/.config/fish/conf.d/terminal-beauty.fish` when fish is installed
 - iTerm2: copies the `.itermcolors` preset and prints import instructions
+
+On Apple Terminal, Starship provides the rich prompt style. Terminal window
+colors are controlled separately by Apple Terminal profiles.
 
 Rollback:
 

@@ -47,6 +47,15 @@ backup first, then applies the selected theme:
   when fish is installed.
 - **iTerm2**: copies the `.itermcolors` preset and prints import instructions.
 
+If the user is on Apple Terminal, explain the split clearly:
+- Apple Terminal profiles control the window/background/ANSI color palette.
+- Starship controls the rich prompt style shown in the gallery.
+- The user does not need iTerm2 to get the Starship prompt effect, but Apple
+  Terminal color profiles require separate support or manual profile changes.
+
+If Starship is missing and the user wants the gallery-style prompt, offer:
+`brew install starship`. Install only with explicit consent.
+
 Show the backup directory path printed by the installer so the user knows
 their original config is safe.
 

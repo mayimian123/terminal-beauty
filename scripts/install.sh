@@ -61,6 +61,9 @@ if [ -f "$INSTALLED_THEME_DIR/zsh.sh" ]; then
   awk '
     /^# terminal-beauty:/ { skip_next=1; next }
     skip_next && /^source ".*\/\.terminal-beauty\/themes\/.*\/zsh\.sh"$/ { skip_next=0; next }
+    /^source .*\/\.claude\/skills\/terminal-beauty\/themes\/.*\/zsh\.sh"?$/ { next }
+    /^source "?.*\/\.codex\/skills\/terminal-beauty\/themes\/.*\/zsh\.sh"?$/ { next }
+    /^source "?.*\/Desktop\/terminal-beauty\/themes\/.*\/zsh\.sh"?$/ { next }
     { skip_next=0; print }
   ' "$ZSHRC" > "$tmp_zshrc"
   mv "$tmp_zshrc" "$ZSHRC"
@@ -77,7 +80,8 @@ if [ -f "$INSTALLED_THEME_DIR/starship.toml" ]; then
   cp "$INSTALLED_THEME_DIR/starship.toml" "$HOME/.config/starship.toml"
   echo "Updated: $HOME/.config/starship.toml"
   if ! command -v starship >/dev/null 2>&1; then
-    echo "Note: Starship is not installed, so the prompt config will take effect after you install Starship."
+    echo "Note: Starship is not installed, so the prompt config will take effect after you install it:"
+    echo "  brew install starship"
   fi
 fi
 
@@ -92,6 +96,9 @@ if [ "${TERM_PROGRAM:-}" = "iTerm.app" ] && [ -f "$INSTALLED_THEME_DIR/iterm.ite
   echo "Import it in iTerm2: Settings > Profiles > Colors > Color Presets > Import."
 elif [ -f "$INSTALLED_THEME_DIR/iterm.itermcolors" ]; then
   echo "iTerm2 preset copied for later use: $INSTALLED_THEME_DIR/iterm.itermcolors"
+  if [ "${TERM_PROGRAM:-}" = "Apple_Terminal" ]; then
+    echo "Apple Terminal note: Starship controls the prompt style; Terminal Profiles control the window colors."
+  fi
 fi
 
 echo "Theme applied: $THEME_NAME"
