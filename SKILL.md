@@ -22,8 +22,10 @@ explain that this version targets macOS and do not attempt to apply files.
 
 ### 2. Present themes
 Send the user to the visual gallery instead of listing every palette in chat:
-`demo/themes-preview.html` when running locally, or the project's GitHub Pages
-gallery once a public URL exists.
+https://mayimian123.github.io/terminal-beauty/
+
+If the public gallery is unavailable while developing locally, use
+`demo/themes-preview.html`.
 
 Show only the curated theme slugs and a short prompt to pick one. Do not dump
 all 18-color palettes unless the user asks for details.

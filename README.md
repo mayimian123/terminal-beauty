@@ -11,6 +11,7 @@ themes, choose one, then apply only that theme.
 
 Open the gallery:
 
+- [Public gallery](https://mayimian123.github.io/terminal-beauty/)
 - [index.html](index.html)
 - [demo/themes-preview.html](demo/themes-preview.html)
 - Static screenshot: ![terminal-beauty theme preview](demo/themes-preview.png)
