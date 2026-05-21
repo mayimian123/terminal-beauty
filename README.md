@@ -1,10 +1,10 @@
 <div align="center">
 
-# 终端美容师
+# Terminal Beauty
 
-> “我只是想让 terminal 好看一点，为什么要先读 18 个 hex 色值？”
+> “先看到真实效果，再决定要不要把它装进自己的终端。”
 
-把「看主题 → 选主题 → 备份 → 应用 → 可回滚」做成一条顺滑的 macOS 终端美化流程。
+一个面向 macOS 的终端主题 skill，把「看主题 → 选主题 → 备份 → 应用 → 可回滚」做成一条顺滑流程。
 
 它不是一个单纯的配色仓库，而是一个给 Codex / Claude Code 使用的 skill：
 先让用户在网页里可视化选择主题，再由本地脚本安全地应用到 zsh、Starship、fish 和 iTerm2。
@@ -59,26 +59,26 @@
 核心流程是：
 
 ```text
-打开主题预览页 -> 选择主题 slug -> 自动备份 -> 应用主题 -> 不喜欢就回滚
+打开主题预览页 -> 选择主题名 -> 自动备份 -> 应用主题 -> 不喜欢就回滚
 ```
 
 它目前支持：
 
-- zsh：写入一行受管理的 theme source
+- zsh：写入一行由 Terminal Beauty 管理的主题配置
 - Starship：替换 `starship.toml`
-- fish：写入 fish conf.d 配置
+- fish：写入 fish 启动配置
 - iTerm2：提供可导入的 `.itermcolors` 配色文件
 
 ## 为什么不是只放 8 套模板
 
-终端主题是视觉决策。只看 `Tokyo Night`、`Nord`、`#7aa2f7` 这类文字，不够直观。
+终端主题是视觉决策。只看主题名和颜色代码，很难判断它放进真实终端后是否舒服。
 
 所以这个仓库分成两层：
 
 - **Gallery**：让用户先看真实终端预览
 - **Installer**：只应用用户选中的主题，并且先备份
 
-这样使用 skill 时不需要在对话里展开 8 套完整 palette，也不需要用户一套套试。
+这样使用 skill 时不需要在对话里展开一长串配色说明，也不需要用户一套套试。
 
 ## 30 秒上手
 
@@ -86,7 +86,7 @@
 
 [https://mayimian123.github.io/terminal-beauty/](https://mayimian123.github.io/terminal-beauty/)
 
-选择一个主题 slug，例如 `tokyo-night`，然后在仓库根目录运行：
+选择一个主题名，例如 `tokyo-night`，然后在仓库根目录运行：
 
 ```bash
 scripts/install.sh tokyo-night
@@ -133,7 +133,7 @@ scripts/rollback.sh ~/.terminal-beauty-backups/<timestamp>
 
 1. 检测用户的 macOS 终端环境。
 2. 给出主题预览页，而不是在聊天里展开所有配色。
-3. 让用户选择一个主题 slug。
+3. 让用户选择一个主题名。
 4. 执行 `scripts/install.sh <theme>`。
 5. 告诉用户备份路径，以及 iTerm2 的导入路径。
 
@@ -197,7 +197,7 @@ Starship, fish, and iTerm2.
 It is designed around a visual-first flow:
 
 ```text
-preview themes -> choose a theme slug -> back up current config -> apply theme -> roll back if needed
+preview themes -> choose a theme name -> back up current config -> apply theme -> roll back if needed
 ```
 
 Open the gallery:
