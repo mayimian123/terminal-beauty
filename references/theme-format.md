@@ -1,6 +1,6 @@
 # Theme directory format
 
-Every theme is a directory under `themes/<name>/` with exactly five files.
+Every theme is a directory under `themes/<name>/` with exactly six files.
 
 ## theme.md
 Human-readable metadata. Sections:
@@ -29,6 +29,16 @@ Color`, `Link Color`. Each is a dict of `Red/Green/Blue Component` floats.
 For hex `#RRGGBB`: each component float = decimal(channel) / 255.
 Example: `#1a1b26` -> R=26/255=0.10196, G=27/255=0.10588, B=38/255=0.14902.
 Use at least 5 decimal places.
+
+## terminal.terminal
+An Apple Terminal profile (plist XML). Contains `ANSIBlackColor`,
+`ANSIRedColor`, `ANSIGreenColor`, `ANSIYellowColor`, `ANSIBlueColor`,
+`ANSIMagentaColor`, `ANSICyanColor`, `ANSIWhiteColor`, their bright variants,
+plus `BackgroundColor`, `TextColor`, `TextBoldColor`, `CursorColor`, and
+`SelectionColor`.
+
+Generate these profiles with `scripts/generate_terminal_profiles.py` so the
+color values are valid macOS archived `NSColor` data.
 
 ## fish.fish
 A snippet for `~/.config/fish/conf.d/`. Sets fish color variables

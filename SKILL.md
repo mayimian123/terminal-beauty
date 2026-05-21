@@ -5,9 +5,9 @@ description: Use when the user wants to make their macOS terminal look better �
 
 # terminal-beauty
 
-Beautify the user's macOS terminal by applying a color theme to zsh,
-Starship, iTerm2, and/or fish — with a guaranteed-safe backup and rollback
-path.
+Beautify the user's macOS terminal by applying a color theme to Apple
+Terminal, zsh, Starship, iTerm2, and/or fish — with a guaranteed-safe backup
+and rollback path.
 
 ## Workflow
 
@@ -19,6 +19,13 @@ terminal app, whether Oh My Zsh / Starship / fish are installed.
 
 This skill is intentionally macOS-first. If the user is on Windows or Linux,
 explain that this version targets macOS and do not attempt to apply files.
+
+Apple Terminal is the default supported path. iTerm2 is optional, not required.
+
+If Starship is missing and the user wants the gallery-style prompt, explain
+that Starship controls the rich prompt segments while Apple Terminal controls
+the window colors. Offer `brew install starship`, and install only with
+explicit consent.
 
 ### 2. Present themes
 Send the user to the visual gallery instead of listing every palette in chat:
@@ -45,16 +52,20 @@ backup first, then applies the selected theme:
 - **Starship**: copies `starship.toml` to `~/.config/starship.toml`.
 - **fish**: copies `fish.fish` to `~/.config/fish/conf.d/terminal-beauty.fish`
   when fish is installed.
+- **Apple Terminal**: copies `terminal.terminal` and prints import instructions.
 - **iTerm2**: copies the `.itermcolors` preset and prints import instructions.
 
 If the user is on Apple Terminal, explain the split clearly:
 - Apple Terminal profiles control the window/background/ANSI color palette.
 - Starship controls the rich prompt style shown in the gallery.
-- The user does not need iTerm2 to get the Starship prompt effect, but Apple
-  Terminal color profiles require separate support or manual profile changes.
+- The user does not need iTerm2 to get the Starship prompt effect.
 
-If Starship is missing and the user wants the gallery-style prompt, offer:
-`brew install starship`. Install only with explicit consent.
+After installing for Apple Terminal, ask whether to open the generated profile
+now. If the user agrees, run:
+`open ~/.terminal-beauty/themes/<theme-slug>/terminal.terminal`.
+
+Alternatively, use `scripts/install.sh --open-terminal-profile <theme-slug>`
+only after the user has explicitly agreed to opening the profile.
 
 Show the backup directory path printed by the installer so the user knows
 their original config is safe.
@@ -64,7 +75,9 @@ and Starship parts and tell the user the color preset must be set manually.
 
 ### 5. Show the user how to see it
 Tell them to open a new terminal tab/window, or run `source ~/.zshrc`
-(zsh) / `exec fish` (fish), and to select the iTerm2 preset if applicable.
+(zsh) / `exec fish` (fish). For Apple Terminal, tell them to select the
+imported profile in Terminal > Settings > Profiles. For iTerm2, tell them to
+select the imported color preset.
 
 ### 6. Iterate
 - "Try another" → go back to step 3 and run `scripts/install.sh <theme-slug>`

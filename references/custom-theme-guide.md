@@ -16,7 +16,7 @@ Use this when the user wants a look not covered by the curated library
      be clearly distinguishable from one another and readable on bg.
    - Bright variants are lighter/more saturated versions of the base.
 
-3. **Create the theme directory.** Write the five files into
+3. **Create the theme directory.** Write the six files into
    `themes/_custom/<slug>/`, following `references/theme-format.md`
    exactly — the same structure as `themes/tokyo-night/`.
 

@@ -7,7 +7,7 @@
 一个面向 macOS 的终端主题 skill，把「看主题 → 选主题 → 备份 → 应用 → 可回滚」做成一条顺滑流程。
 
 它不是一个单纯的配色仓库，而是一个给 Codex / Claude Code 使用的 skill：
-先让用户在网页里可视化选择主题，再由本地脚本安全地应用到 zsh、Starship、fish 和 iTerm2。
+先让用户在网页里可视化选择主题，再由本地脚本安全地应用到 Apple Terminal、zsh、Starship、fish 和 iTerm2。
 
 <p>
   <img alt="macOS" src="https://img.shields.io/badge/macOS-focused-111827?style=flat-square">
@@ -45,7 +45,8 @@
 - `~/.zshrc`
 - `~/.config/starship.toml`
 - `~/.config/fish/conf.d/terminal-beauty.fish`
-- iTerm2 的 `.itermcolors` 主题文件需要手动导入
+- Apple Terminal 的 `.terminal` profile 需要手动确认导入
+- iTerm2 的 `.itermcolors` 主题文件可选导入
 
 安装脚本不会删除备份，也不会在没有明确同意的情况下安装新工具。
 
@@ -68,6 +69,7 @@
 - zsh：写入一行由 Terminal Beauty 管理的主题配置
 - Starship：替换 `starship.toml`
 - fish：写入 fish 启动配置
+- Apple Terminal：生成可导入的 `.terminal` profile
 - iTerm2：提供可导入的 `.itermcolors` 配色文件
 
 ## Apple Terminal 和 Starship
@@ -79,13 +81,15 @@
 - **Apple Terminal Profile**：控制窗口背景色、文字色、光标色和基础 16 色。
 - **Starship**：控制命令行提示符，也就是目录、git 分支、执行时间这些分段样式。
 
-所以，Apple Terminal + Starship 可以实现预览图里最明显的高级 prompt 效果；窗口配色部分则需要 Apple Terminal Profile 支持，或者在 Terminal 设置里手动调整。
+所以，Apple Terminal + Starship 可以实现预览图里最明显的高级 prompt 效果；窗口配色部分由项目生成的 Apple Terminal profile 负责。
 
 安装 Starship：
 
 ```bash
 brew install starship
 ```
+
+iTerm2 是可选路径，不是必需依赖。
 
 ## 为什么不是只放 8 套模板
 
@@ -109,6 +113,14 @@ brew install starship
 ```bash
 scripts/install.sh tokyo-night
 ```
+
+如果你已经决定要立即打开 Apple Terminal profile 导入窗口，可以运行：
+
+```bash
+scripts/install.sh --open-terminal-profile tokyo-night
+```
+
+更稳妥的方式是先运行普通安装命令，再按脚本输出的路径确认导入。
 
 打开一个新的终端标签页，或者重新加载 zsh：
 
@@ -145,6 +157,12 @@ scripts/rollback.sh ~/.terminal-beauty-backups/<timestamp>
 
 如果你连续试多套主题，`install.sh` 会替换上一条受管理的 zsh 配置，不会在 `.zshrc` 里无限叠加。
 
+Apple Terminal profile 导入后，在这里选择：
+
+```text
+Terminal > Settings > Profiles
+```
+
 ## 作为 Skill 使用
 
 当用户说“美化我的 terminal”时，assistant 应该：
@@ -152,8 +170,10 @@ scripts/rollback.sh ~/.terminal-beauty-backups/<timestamp>
 1. 检测用户的 macOS 终端环境。
 2. 给出主题预览页，而不是在聊天里展开所有配色。
 3. 让用户选择一个主题名。
-4. 执行 `scripts/install.sh <theme>`。
-5. 告诉用户备份路径，以及 iTerm2 的导入路径。
+4. 如果用户需要预览图里的 prompt 效果，确认后安装 Starship。
+5. 执行 `scripts/install.sh <theme>`。
+6. 告诉用户备份路径，以及 Apple Terminal profile 的导入路径。
+7. 如果用户同意，打开 `terminal.terminal` 进行导入。
 
 这个 skill 的重点是让用户更快做出视觉选择，同时保留安全回滚路径。
 
@@ -182,6 +202,7 @@ terminal-beauty/
 - `demo/themes-preview.html`：真正的主题预览页面。
 - `demo/themes-preview.png`：README 里展示用的静态图。
 - `SKILL.md`：给 Codex / Claude Code 读取的工作流说明。
+- `themes/*/terminal.terminal`：Apple Terminal 原生 profile。
 
 `index.html` 和 `demo/themes-preview.html` 不是重复文件。前者负责稳定入口，后者负责实际 gallery。以后重做预览页，只需要替换 `demo/themes-preview.html`。
 
@@ -201,7 +222,7 @@ bash -n scripts/*.sh
 
 ## 适用范围
 
-当前版本明确面向 macOS，重点支持 zsh、Starship、fish 和 iTerm2。
+当前版本明确面向 macOS，默认支持 Apple Terminal，重点支持 zsh、Starship、fish，也保留 iTerm2 可选路径。
 
 Windows Terminal、PowerShell、WSL、Warp、Alacritty、VS Code 集成终端等可以以后再扩展，但不放进第一版，避免把核心体验做复杂。
 
@@ -209,8 +230,8 @@ Windows Terminal、PowerShell、WSL、Warp、Alacritty、VS Code 集成终端等
 
 ## English
 
-`terminal-beauty` is a macOS-first terminal theme skill and installer for zsh,
-Starship, fish, and iTerm2.
+`terminal-beauty` is a macOS-first terminal theme skill and installer for Apple
+Terminal, zsh, Starship, fish, and iTerm2.
 
 It is designed around a visual-first flow:
 
@@ -239,10 +260,11 @@ Then it applies the selected theme where supported:
 - zsh: appends one managed source line to `~/.zshrc`
 - Starship: writes `~/.config/starship.toml`
 - fish: writes `~/.config/fish/conf.d/terminal-beauty.fish` when fish is installed
+- Apple Terminal: copies a native `.terminal` profile and prints import instructions
 - iTerm2: copies the `.itermcolors` preset and prints import instructions
 
 On Apple Terminal, Starship provides the rich prompt style. Terminal window
-colors are controlled separately by Apple Terminal profiles.
+colors are controlled by the generated Apple Terminal profile.
 
 Rollback:
 

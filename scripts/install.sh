@@ -1,16 +1,38 @@
 #!/usr/bin/env bash
 # Applies one terminal-beauty theme on macOS.
-# Usage: install.sh <theme-name>
+# Usage: install.sh [--open-terminal-profile] <theme-name>
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 THEMES_DIR="$ROOT_DIR/themes"
-THEME_NAME="${1:-}"
+OPEN_TERMINAL_PROFILE="no"
+THEME_NAME=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --open-terminal-profile)
+      OPEN_TERMINAL_PROFILE="yes"
+      shift
+      ;;
+    -h|--help)
+      THEME_NAME="$1"
+      shift
+      ;;
+    *)
+      if [ -n "$THEME_NAME" ]; then
+        echo "Unexpected argument: $1" >&2
+        exit 1
+      fi
+      THEME_NAME="$1"
+      shift
+      ;;
+  esac
+done
 
 usage() {
   cat <<EOF
-Usage: scripts/install.sh <theme-name>
+Usage: scripts/install.sh [--open-terminal-profile] <theme-name>
 
 Available themes:
 $(find "$THEMES_DIR" -mindepth 1 -maxdepth 1 -type d ! -name '_custom' -exec basename {} \; | sort | sed 's/^/  - /')
@@ -94,10 +116,17 @@ fi
 if [ "${TERM_PROGRAM:-}" = "iTerm.app" ] && [ -f "$INSTALLED_THEME_DIR/iterm.itermcolors" ]; then
   echo "iTerm2 color preset ready: $INSTALLED_THEME_DIR/iterm.itermcolors"
   echo "Import it in iTerm2: Settings > Profiles > Colors > Color Presets > Import."
+elif [ "${TERM_PROGRAM:-}" = "Apple_Terminal" ] && [ -f "$INSTALLED_THEME_DIR/terminal.terminal" ]; then
+  echo "Apple Terminal profile ready: $INSTALLED_THEME_DIR/terminal.terminal"
+  echo "Import it with: open \"$INSTALLED_THEME_DIR/terminal.terminal\""
+  echo "After importing, choose it in Terminal > Settings > Profiles."
+  if [ "$OPEN_TERMINAL_PROFILE" = "yes" ]; then
+    open "$INSTALLED_THEME_DIR/terminal.terminal"
+  fi
 elif [ -f "$INSTALLED_THEME_DIR/iterm.itermcolors" ]; then
   echo "iTerm2 preset copied for later use: $INSTALLED_THEME_DIR/iterm.itermcolors"
-  if [ "${TERM_PROGRAM:-}" = "Apple_Terminal" ]; then
-    echo "Apple Terminal note: Starship controls the prompt style; Terminal Profiles control the window colors."
+  if [ -f "$INSTALLED_THEME_DIR/terminal.terminal" ]; then
+    echo "Apple Terminal profile copied for later use: $INSTALLED_THEME_DIR/terminal.terminal"
   fi
 fi
 
