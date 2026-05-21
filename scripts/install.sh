@@ -1,18 +1,23 @@
 #!/usr/bin/env bash
 # Applies one terminal-beauty theme on macOS.
-# Usage: install.sh [--open-terminal-profile] <theme-name>
+# Usage: install.sh [--open-terminal-profile] [--import-terminal-profiles] <theme-name>
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 THEMES_DIR="$ROOT_DIR/themes"
 OPEN_TERMINAL_PROFILE="no"
+IMPORT_TERMINAL_PROFILES="no"
 THEME_NAME=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --open-terminal-profile)
       OPEN_TERMINAL_PROFILE="yes"
+      shift
+      ;;
+    --import-terminal-profiles)
+      IMPORT_TERMINAL_PROFILES="yes"
       shift
       ;;
     -h|--help)
@@ -32,7 +37,7 @@ done
 
 usage() {
   cat <<EOF
-Usage: scripts/install.sh [--open-terminal-profile] <theme-name>
+Usage: scripts/install.sh [--open-terminal-profile] [--import-terminal-profiles] <theme-name>
 
 Available themes:
 $(find "$THEMES_DIR" -mindepth 1 -maxdepth 1 -type d ! -name '_custom' -exec basename {} \; | sort | sed 's/^/  - /')
@@ -123,10 +128,17 @@ if [ "${TERM_PROGRAM:-}" = "iTerm.app" ] && [ -f "$INSTALLED_THEME_DIR/iterm.ite
   echo "Import it in iTerm2: Settings > Profiles > Colors > Color Presets > Import."
 elif [ "${TERM_PROGRAM:-}" = "Apple_Terminal" ] && [ -f "$APPLE_TERMINAL_PROFILE" ]; then
   echo "Apple Terminal profile ready: $APPLE_TERMINAL_PROFILE"
-  echo "Import it with: open \"$APPLE_TERMINAL_PROFILE\""
-  echo "After importing, choose it in Terminal > Settings > Profiles."
-  if [ "$OPEN_TERMINAL_PROFILE" = "yes" ]; then
+  if [ "$IMPORT_TERMINAL_PROFILES" = "yes" ]; then
+    "$SCRIPT_DIR/import_terminal_profiles.py" --set-default "$THEME_NAME"
+    echo "Apple Terminal default profile set to: $THEME_NAME"
+    echo "Open a new Terminal window to see the selected profile."
+  elif [ "$OPEN_TERMINAL_PROFILE" = "yes" ]; then
     open "$APPLE_TERMINAL_PROFILE"
+    echo "After importing, choose it in Terminal > Settings > Profiles."
+  else
+    echo "Import it with: open \"$APPLE_TERMINAL_PROFILE\""
+    echo "Or import all Terminal Beauty profiles and set this one as default with:"
+    echo "  scripts/install.sh --import-terminal-profiles $THEME_NAME"
   fi
 elif [ -f "$INSTALLED_THEME_DIR/iterm.itermcolors" ]; then
   echo "iTerm2 preset copied for later use: $INSTALLED_THEME_DIR/iterm.itermcolors"

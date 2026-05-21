@@ -120,7 +120,13 @@ scripts/install.sh tokyo-night
 scripts/install.sh --open-terminal-profile tokyo-night
 ```
 
-更稳妥的方式是先运行普通安装命令，再按脚本输出的路径确认导入。
+更省心的方式是一次性导入全部 Apple Terminal 主题，并把当前主题设成默认：
+
+```bash
+scripts/install.sh --import-terminal-profiles tokyo-night
+```
+
+这样之后你可以直接在 Terminal 设置里筛选/切换全部 Terminal Beauty 主题。
 
 打开一个新的终端标签页，或者重新加载 zsh：
 
@@ -163,6 +169,15 @@ Apple Terminal profile 导入后，在这里选择：
 Terminal > Settings > Profiles
 ```
 
+如果使用了 `--import-terminal-profiles`，脚本会自动设置：
+
+```text
+Default Window Settings
+Startup Window Settings
+```
+
+之后新开的 Terminal 窗口应该直接使用选中的主题。已经打开的旧窗口不会自动变色，需要重新打开窗口。
+
 ## 作为 Skill 使用
 
 当用户说“美化我的 terminal”时，assistant 应该：
@@ -172,8 +187,9 @@ Terminal > Settings > Profiles
 3. 让用户选择一个主题名。
 4. 如果用户需要预览图里的 prompt 效果，确认后安装 Starship。
 5. 执行 `scripts/install.sh <theme>`。
-6. 告诉用户备份路径，以及 Apple Terminal profile 的导入路径。
-7. 如果用户同意，打开 `<theme>.terminal` 进行导入。
+6. 告诉用户备份路径。
+7. 如果用户同意，执行 `scripts/install.sh --import-terminal-profiles <theme>`，一次性导入全部 Apple Terminal 主题并设置默认。
+8. 如果用户偏好手动导入，再打开 `<theme>.terminal`。
 
 这个 skill 的重点是让用户更快做出视觉选择，同时保留安全回滚路径。
 
@@ -190,6 +206,7 @@ terminal-beauty/
 │   ├── detect.sh
 │   ├── backup.sh
 │   ├── install.sh
+│   ├── import_terminal_profiles.py
 │   └── rollback.sh
 ├── themes/
 ├── references/
@@ -203,6 +220,7 @@ terminal-beauty/
 - `demo/themes-preview.png`：README 里展示用的静态图。
 - `SKILL.md`：给 Codex / Claude Code 读取的工作流说明。
 - `themes/*/<主题名>.terminal`：Apple Terminal 原生 profile。文件名会影响导入后在 Terminal 设置里显示的名称。
+- `scripts/import_terminal_profiles.py`：把全部 Apple Terminal profiles 写入 Terminal 设置，并可设置默认主题。
 
 `index.html` 和 `demo/themes-preview.html` 不是重复文件。前者负责稳定入口，后者负责实际 gallery。以后重做预览页，只需要替换 `demo/themes-preview.html`。
 

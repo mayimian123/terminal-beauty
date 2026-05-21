@@ -60,12 +60,13 @@ If the user is on Apple Terminal, explain the split clearly:
 - Starship controls the rich prompt style shown in the gallery.
 - The user does not need iTerm2 to get the Starship prompt effect.
 
-After installing for Apple Terminal, ask whether to open the generated profile
-now. If the user agrees, run:
-`open ~/.terminal-beauty/themes/<theme-slug>/<theme-slug>.terminal`.
+After installing for Apple Terminal, ask whether to import all Terminal Beauty
+profiles and set the selected theme as the Apple Terminal default. Prefer this
+path when the user wants the smoothest experience. With explicit consent, run:
+`scripts/install.sh --import-terminal-profiles <theme-slug>`.
 
-Alternatively, use `scripts/install.sh --open-terminal-profile <theme-slug>`
-only after the user has explicitly agreed to opening the profile.
+If the user prefers manual import, run:
+`open ~/.terminal-beauty/themes/<theme-slug>/<theme-slug>.terminal`.
 
 Show the backup directory path printed by the installer so the user knows
 their original config is safe.
@@ -75,9 +76,11 @@ and Starship parts and tell the user the color preset must be set manually.
 
 ### 5. Show the user how to see it
 Tell them to open a new terminal tab/window, or run `source ~/.zshrc`
-(zsh) / `exec fish` (fish). For Apple Terminal, tell them to select the
-imported profile in Terminal > Settings > Profiles. For iTerm2, tell them to
-select the imported color preset.
+(zsh) / `exec fish` (fish). If Apple Terminal profiles were imported
+automatically, a new Terminal window should use the selected theme. Already
+open windows may keep their old profile. For manual Apple Terminal import, tell
+them to select the imported profile in Terminal > Settings > Profiles. For
+iTerm2, tell them to select the imported color preset.
 
 ### 6. Iterate
 - "Try another" → go back to step 3 and run `scripts/install.sh <theme-slug>`
