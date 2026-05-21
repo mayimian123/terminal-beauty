@@ -113,20 +113,25 @@ if command -v fish >/dev/null 2>&1 && [ -f "$INSTALLED_THEME_DIR/fish.fish" ]; t
   echo "Updated: $HOME/.config/fish/conf.d/terminal-beauty.fish"
 fi
 
+APPLE_TERMINAL_PROFILE="$INSTALLED_THEME_DIR/$THEME_NAME.terminal"
+if [ ! -f "$APPLE_TERMINAL_PROFILE" ] && [ -f "$INSTALLED_THEME_DIR/terminal.terminal" ]; then
+  APPLE_TERMINAL_PROFILE="$INSTALLED_THEME_DIR/terminal.terminal"
+fi
+
 if [ "${TERM_PROGRAM:-}" = "iTerm.app" ] && [ -f "$INSTALLED_THEME_DIR/iterm.itermcolors" ]; then
   echo "iTerm2 color preset ready: $INSTALLED_THEME_DIR/iterm.itermcolors"
   echo "Import it in iTerm2: Settings > Profiles > Colors > Color Presets > Import."
-elif [ "${TERM_PROGRAM:-}" = "Apple_Terminal" ] && [ -f "$INSTALLED_THEME_DIR/terminal.terminal" ]; then
-  echo "Apple Terminal profile ready: $INSTALLED_THEME_DIR/terminal.terminal"
-  echo "Import it with: open \"$INSTALLED_THEME_DIR/terminal.terminal\""
+elif [ "${TERM_PROGRAM:-}" = "Apple_Terminal" ] && [ -f "$APPLE_TERMINAL_PROFILE" ]; then
+  echo "Apple Terminal profile ready: $APPLE_TERMINAL_PROFILE"
+  echo "Import it with: open \"$APPLE_TERMINAL_PROFILE\""
   echo "After importing, choose it in Terminal > Settings > Profiles."
   if [ "$OPEN_TERMINAL_PROFILE" = "yes" ]; then
-    open "$INSTALLED_THEME_DIR/terminal.terminal"
+    open "$APPLE_TERMINAL_PROFILE"
   fi
 elif [ -f "$INSTALLED_THEME_DIR/iterm.itermcolors" ]; then
   echo "iTerm2 preset copied for later use: $INSTALLED_THEME_DIR/iterm.itermcolors"
-  if [ -f "$INSTALLED_THEME_DIR/terminal.terminal" ]; then
-    echo "Apple Terminal profile copied for later use: $INSTALLED_THEME_DIR/terminal.terminal"
+  if [ -f "$APPLE_TERMINAL_PROFILE" ]; then
+    echo "Apple Terminal profile copied for later use: $APPLE_TERMINAL_PROFILE"
   fi
 fi
 

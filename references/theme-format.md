@@ -30,7 +30,7 @@ For hex `#RRGGBB`: each component float = decimal(channel) / 255.
 Example: `#1a1b26` -> R=26/255=0.10196, G=27/255=0.10588, B=38/255=0.14902.
 Use at least 5 decimal places.
 
-## terminal.terminal
+## <theme-slug>.terminal
 An Apple Terminal profile (plist XML). Contains `ANSIBlackColor`,
 `ANSIRedColor`, `ANSIGreenColor`, `ANSIYellowColor`, `ANSIBlueColor`,
 `ANSIMagentaColor`, `ANSICyanColor`, `ANSIWhiteColor`, their bright variants,
@@ -39,6 +39,9 @@ plus `BackgroundColor`, `TextColor`, `TextBoldColor`, `CursorColor`, and
 
 Generate these profiles with `scripts/generate_terminal_profiles.py` so the
 color values are valid macOS archived `NSColor` data.
+
+The filename must include the theme slug, such as `catppuccin.terminal`.
+Apple Terminal may use the imported filename as the visible profile name.
 
 ## fish.fish
 A snippet for `~/.config/fish/conf.d/`. Sets fish color variables

@@ -102,7 +102,7 @@ def main() -> None:
             continue
         title, palette = parse_theme(theme_dir / "theme.md")
         profile = build_profile(theme_dir.name, title, palette)
-        output = theme_dir / "terminal.terminal"
+        output = theme_dir / f"{theme_dir.name}.terminal"
         output.write_bytes(
             plistlib.dumps(profile, fmt=plistlib.FMT_XML, sort_keys=False)
         )

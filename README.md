@@ -173,7 +173,7 @@ Terminal > Settings > Profiles
 4. 如果用户需要预览图里的 prompt 效果，确认后安装 Starship。
 5. 执行 `scripts/install.sh <theme>`。
 6. 告诉用户备份路径，以及 Apple Terminal profile 的导入路径。
-7. 如果用户同意，打开 `terminal.terminal` 进行导入。
+7. 如果用户同意，打开 `<theme>.terminal` 进行导入。
 
 这个 skill 的重点是让用户更快做出视觉选择，同时保留安全回滚路径。
 
@@ -202,7 +202,7 @@ terminal-beauty/
 - `demo/themes-preview.html`：真正的主题预览页面。
 - `demo/themes-preview.png`：README 里展示用的静态图。
 - `SKILL.md`：给 Codex / Claude Code 读取的工作流说明。
-- `themes/*/terminal.terminal`：Apple Terminal 原生 profile。
+- `themes/*/<主题名>.terminal`：Apple Terminal 原生 profile。文件名会影响导入后在 Terminal 设置里显示的名称。
 
 `index.html` 和 `demo/themes-preview.html` 不是重复文件。前者负责稳定入口，后者负责实际 gallery。以后重做预览页，只需要替换 `demo/themes-preview.html`。
 

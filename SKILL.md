@@ -52,7 +52,7 @@ backup first, then applies the selected theme:
 - **Starship**: copies `starship.toml` to `~/.config/starship.toml`.
 - **fish**: copies `fish.fish` to `~/.config/fish/conf.d/terminal-beauty.fish`
   when fish is installed.
-- **Apple Terminal**: copies `terminal.terminal` and prints import instructions.
+- **Apple Terminal**: copies `<theme-slug>.terminal` and prints import instructions.
 - **iTerm2**: copies the `.itermcolors` preset and prints import instructions.
 
 If the user is on Apple Terminal, explain the split clearly:
@@ -62,7 +62,7 @@ If the user is on Apple Terminal, explain the split clearly:
 
 After installing for Apple Terminal, ask whether to open the generated profile
 now. If the user agrees, run:
-`open ~/.terminal-beauty/themes/<theme-slug>/terminal.terminal`.
+`open ~/.terminal-beauty/themes/<theme-slug>/<theme-slug>.terminal`.
 
 Alternatively, use `scripts/install.sh --open-terminal-profile <theme-slug>`
 only after the user has explicitly agreed to opening the profile.

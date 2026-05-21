@@ -7,7 +7,7 @@ load test_helper
     [ -d "$theme_dir" ] || continue
     [ "$(basename "$theme_dir")" != "_custom" ] || continue
 
-    profile="$theme_dir/terminal.terminal"
+    profile="$theme_dir/$(basename "$theme_dir").terminal"
     [ -f "$profile" ]
 
     plutil -lint "$profile" >/dev/null

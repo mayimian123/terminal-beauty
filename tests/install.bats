@@ -31,7 +31,7 @@ teardown() { teardown_sandbox; }
 
   [ -d "$FAKE_HOME/.terminal-beauty/themes/tokyo-night" ]
   [ -f "$FAKE_HOME/.config/starship.toml" ]
-  [ -f "$FAKE_HOME/.terminal-beauty/themes/tokyo-night/terminal.terminal" ]
+  [ -f "$FAKE_HOME/.terminal-beauty/themes/tokyo-night/tokyo-night.terminal" ]
   grep -q 'terminal-beauty: tokyo-night' "$FAKE_HOME/.zshrc"
   [ -n "$(find "$FAKE_HOME/.terminal-beauty-backups" -name manifest.txt -print -quit)" ]
 }
