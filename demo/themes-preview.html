@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>terminal-beauty · 主题预览</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0a0a0e;
+    --paper:#e9e6df;
+    --muted:#76737f;
+    --line:#23222b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--ink)}
+  body{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--paper);
+    min-height:100vh;
+    padding:0 0 6rem;
+    background:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- header ---------- */
+  header.top{
+    max-width:1280px;margin:0 auto;
+    padding:5.5rem 2.5rem 3rem;
+  }
+  .eyebrow{
+    font-size:.74rem;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--muted);display:flex;align-items:center;gap:1rem;
+    opacity:0;animation:rise .7s .05s ease forwards;
+  }
+  .eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:800;line-height:.92;letter-spacing:0;
+    font-size:clamp(3.4rem,9vw,7.6rem);
+    margin:1.6rem 0 .4rem;
+    opacity:0;animation:rise .9s .12s ease forwards;
+  }
+  h1 .thin{font-weight:200;color:var(--muted);display:block}
+  h1 em{
+    font-style:normal;
+    background:linear-gradient(100deg,#7aa2f7,#bb9af7 38%,#f7768e 70%,#e0af68);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .lede{
+    max-width:54ch;color:#9d9aa6;font-size:.96rem;line-height:1.7;
+    margin-top:1.4rem;
+    opacity:0;animation:rise .9s .2s ease forwards;
+  }
+  .meta{
+    margin-top:1.8rem;display:flex;flex-wrap:wrap;gap:.55rem;
+    opacity:0;animation:rise .9s .28s ease forwards;
+  }
+  .meta span{
+    border:1px solid var(--line);border-radius:999px;
+    padding:.34rem .9rem;font-size:.72rem;color:#b6b3bf;
+    letter-spacing:.06em;
+  }
+  .meta span b{color:#7aa2f7;font-weight:700}
+
+  /* ---------- grid ---------- */
+  .grid{
+    max-width:1280px;margin:0 auto;padding:0 2.5rem;
+    display:grid;grid-template-columns:repeat(2,1fr);gap:2.4rem;
+  }
+  @media(max-width:1080px){.grid{grid-template-columns:1fr}}
+
+  .card{
+    opacity:0;transform:translateY(26px);
+    animation:rise .8s ease forwards;
+  }
+  .card-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .card-head h2{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:700;font-size:1.5rem;letter-spacing:0;
+  }
+  .card-head .idx{
+    font-size:.72rem;color:var(--muted);letter-spacing:.2em;
+    border:1px solid var(--line);border-radius:6px;padding:.2rem .5rem;
+    flex:none;
+  }
+  .blurb{color:#8d8a96;font-size:.82rem;line-height:1.6;margin-bottom:1.1rem;min-height:2.6em}
+
+  /* ---------- terminal window ---------- */
+  .term{
+    border-radius:8px;overflow:hidden;
+    box-shadow:0 26px 60px -22px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.05);
+    transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s;
+  }
+  .card:hover .term{
+    transform:translateY(-7px);
+    box-shadow:0 40px 80px -26px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.1);
+  }
+  .bar{
+    background:rgba(255,255,255,.045);
+    display:flex;align-items:center;gap:.5rem;
+    padding:.7rem .95rem;position:relative;
+    border-bottom:1px solid rgba(0,0,0,.35);
+  }
+  .term{background:var(--bg)}
+  .bar i{width:11px;height:11px;border-radius:50%;display:block}
+  .bar i:nth-child(1){background:#ff5f57}
+  .bar i:nth-child(2){background:#febc2e}
+  .bar i:nth-child(3){background:#28c840}
+  .bar span{
+    position:absolute;left:0;right:0;text-align:center;
+    font-size:.74rem;color:rgba(255,255,255,.4);
+    letter-spacing:.04em;pointer-events:none;
+  }
+  .screen{
+    padding:1.15rem 1.25rem 1.4rem;
+    font-size:.795rem;line-height:1.62;
+    color:var(--fg);
+    white-space:pre-wrap;word-break:break-word;
+  }
+  .row{display:block}
+  .out{display:block;color:var(--fg)}
+
+  /* prompt segments (starship powerline) */
+  .pl{display:inline-flex;align-items:stretch;height:1.55em;vertical-align:-.45em}
+  .seg{display:flex;align-items:center;padding:0 .55rem;font-weight:500;gap:.32rem}
+  .seg.dir{background:var(--blue);color:var(--bg)}
+  .seg.git{background:var(--magenta);color:var(--bg)}
+  .seg.dur{background:var(--brblack);color:var(--fg)}
+  .arrow{width:11px;position:relative;flex:none}
+  .arrow::before{content:'';position:absolute;inset:0;clip-path:polygon(0 0,0 100%,100% 50%)}
+  .a1{background:var(--magenta)} .a1::before{background:var(--blue)}
+  .a2{background:var(--brblack)} .a2::before{background:var(--magenta)}
+  .a3{background:var(--bg)} .a3::before{background:var(--brblack)}
+  .ico{width:.86em;height:.86em;flex:none}
+  .chev{color:var(--green);font-weight:700;margin-right:.45rem}
+  .cmd{color:var(--fg)}
+
+  .c-blue{color:var(--blue);font-weight:700}
+  .c-green{color:var(--green)}
+  .c-red{color:var(--red)}
+  .c-yellow{color:var(--yellow)}
+  .c-magenta{color:var(--magenta)}
+  .c-cyan{color:var(--cyan)}
+  .c-dim{color:var(--brblack)}
+  .cursor{
+    display:inline-block;width:.55em;height:1.05em;background:var(--fg);
+    vertical-align:-.18em;animation:blink 1.15s steps(1) infinite;
+  }
+
+  /* ---------- swatches ---------- */
+  .swatches{
+    display:grid;grid-template-columns:repeat(18,1fr);gap:5px;margin-top:1rem;
+  }
+  .swatches span{
+    aspect-ratio:1;border-radius:4px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);
+  }
+  .legend{
+    display:flex;justify-content:space-between;
+    font-size:.64rem;color:var(--muted);letter-spacing:.14em;
+    text-transform:uppercase;margin-top:.5rem;
+  }
+
+  footer{
+    max-width:1280px;margin:5rem auto 0;padding:2.4rem 2.5rem 0;
+    border-top:1px solid var(--line);
+    color:var(--muted);font-size:.76rem;line-height:1.9;
+  }
+  footer b{color:#b6b3bf;font-weight:700}
+
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  @keyframes blink{50%{opacity:0}}
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="eyebrow">terminal-beauty · macOS 主题库</div>
+  <h1><span class="thin">让你的终端</span><em>变好看</em></h1>
+  <p class="lede">terminal-beauty 内置 8 套经社区验证的精选配色，每套都为 zsh、Starship、iTerm2、fish 调好。下面是同一段终端会话在 8 套主题下的真实渲染——配色取自各主题的 18 色调色板。</p>
+  <div class="meta">
+    <span><b>8</b> 套精选主题</span>
+    <span><b>4</b> 个工具适配</span>
+    <span>检测 · 备份 · 一键回滚</span>
+  </div>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<footer>
+  <b>terminal-beauty</b> · 触发方式：对 Claude Code 说「美化我的 terminal」<br>
+  支持精选主题与按描述定制生成 · 应用前自动备份，随时可回滚
+</footer>
+
+<script>
+const THEMES = [
+  {slug:'tokyo-night', name:'Tokyo Night', blurb:'霓虹东京之夜。深邃藏蓝配柔和粉彩，暗而不刺眼。',
+   bg:'#1a1b26',fg:'#c0caf5',black:'#15161e',red:'#f7768e',green:'#9ece6a',yellow:'#e0af68',blue:'#7aa2f7',magenta:'#bb9af7',cyan:'#7dcfff',white:'#a9b1d6',
+   k:['#414868','#f7768e','#9ece6a','#e0af68','#7aa2f7','#bb9af7','#7dcfff','#c0caf5']},
+  {slug:'dracula', name:'Dracula', blurb:'高饱和亮色撞上灰紫底色，大胆又俏皮，让终端跳起来。',
+   bg:'#282a36',fg:'#f8f8f2',black:'#21222c',red:'#ff5555',green:'#50fa7b',yellow:'#f1fa8c',blue:'#bd93f9',magenta:'#ff79c6',cyan:'#8be9fd',white:'#f8f8f2',
+   k:['#6272a4','#ff6e6e','#69ff94','#ffffa5','#d6acff','#ff92df','#a4ffff','#ffffff']},
+  {slug:'nord', name:'Nord', blurb:'北极极光般的冷蓝色系。低饱和、低对比，安静沉着。',
+   bg:'#2e3440',fg:'#d8dee9',black:'#3b4252',red:'#bf616a',green:'#a3be8c',yellow:'#ebcb8b',blue:'#81a1c1',magenta:'#b48ead',cyan:'#88c0d0',white:'#e5e9f0',
+   k:['#4c566a','#bf616a','#a3be8c','#ebcb8b','#81a1c1','#b48ead','#8fbcbb','#eceff4']},
+  {slug:'catppuccin', name:'Catppuccin Mocha', blurb:'柔和的粉彩暗色，温柔对比、暖调点缀，舒服又护眼。',
+   bg:'#1e1e2e',fg:'#cdd6f4',black:'#45475a',red:'#f38ba8',green:'#a6e3a1',yellow:'#f9e2af',blue:'#89b4fa',magenta:'#f5c2e7',cyan:'#94e2d5',white:'#bac2de',
+   k:['#585b70','#f38ba8','#a6e3a1','#f9e2af','#89b4fa','#f5c2e7','#94e2d5','#a6adc8']},
+  {slug:'gruvbox', name:'Gruvbox Dark', blurb:'复古暖调，大地棕配低调原色，怀旧、低蓝光。',
+   bg:'#282828',fg:'#ebdbb2',black:'#282828',red:'#cc241d',green:'#98971a',yellow:'#d79921',blue:'#458588',magenta:'#b16286',cyan:'#689d6a',white:'#a89984',
+   k:['#928374','#fb4934','#b8bb26','#fabd2f','#83a598','#d3869b','#8ec07c','#ebdbb2']},
+  {slug:'rose-pine', name:'Rosé Pine', blurb:'低饱和的浪漫主义，玫瑰与松针落在深梅色底上，优雅含蓄。',
+   bg:'#191724',fg:'#e0def4',black:'#26233a',red:'#eb6f92',green:'#31748f',yellow:'#f6c177',blue:'#9ccfd8',magenta:'#c4a7e7',cyan:'#ebbcba',white:'#e0def4',
+   k:['#6e6a86','#eb6f92','#31748f','#f6c177','#9ccfd8','#c4a7e7','#ebbcba','#e0def4']},
+  {slug:'everforest', name:'Everforest', blurb:'以绿色为基调的森林系，低对比、暖而柔，长时间盯屏友好。',
+   bg:'#2d353b',fg:'#d3c6aa',black:'#475258',red:'#e67e80',green:'#a7c080',yellow:'#dbbc7f',blue:'#7fbbb3',magenta:'#d699b6',cyan:'#83c092',white:'#d3c6aa',
+   k:['#56635f','#e67e80','#a7c080','#dbbc7f','#7fbbb3','#d699b6','#83c092','#d3c6aa']},
+  {slug:'solarized-dark', name:'Solarized Dark', blurb:'经典的精密配色，低饱和点缀、对比一致，久经验证的均衡方案。',
+   bg:'#002b36',fg:'#839496',black:'#073642',red:'#dc322f',green:'#859900',yellow:'#b58900',blue:'#268bd2',magenta:'#d33682',cyan:'#2aa198',white:'#eee8d5',
+   k:['#002b36','#cb4b16','#586e75','#657b83','#839496','#6c71c4','#93a1a1','#fdf6e3']},
+];
+
+const FOLDER='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+const BRANCH='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="8" r="2.4"/><path d="M6 8.4v7.2M8.4 6H14a4 4 0 0 1 4 4v0M18 10.4c0 4-4 4.6-7.5 5.4"/></svg>';
+const CLOCK='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
+
+const prompt =
+  '<span class="pl">'+
+    '<span class="seg dir">'+FOLDER+'~/dev/terminal-beauty</span>'+
+    '<span class="arrow a1"></span>'+
+    '<span class="seg git">'+BRANCH+'main</span>'+
+    '<span class="arrow a2"></span>'+
+    '<span class="seg dur">'+CLOCK+'1.2s</span>'+
+    '<span class="arrow a3"></span>'+
+  '</span> <span class="chev">&#10095;</span>';
+
+const BODY =
+  '<span class="row">'+prompt+'<span class="cmd">ls</span></span>'+
+  '<span class="out"><span class="c-blue">scripts</span>  <span class="c-blue">themes</span>  README.md  SKILL.md  <span class="c-green">install.sh</span></span>'+
+  '<span class="row">'+prompt+'<span class="cmd">git status -sb</span></span>'+
+  '<span class="out"><span class="c-dim">## </span><span class="c-green">main</span><span class="c-dim">...origin/main</span></span>'+
+  '<span class="out"><span class="c-green"> M</span> themes/nord/theme.md</span>'+
+  '<span class="out"><span class="c-red">??</span> demo/themes-preview.html</span>'+
+  '<span class="row">'+prompt+'<span class="cmd">cat greet.py</span></span>'+
+  '<span class="out"><span class="c-dim"># a friendly greeting</span></span>'+
+  '<span class="out"><span class="c-magenta">def</span> <span class="c-blue">greet</span>(<span class="c-yellow">name</span>):</span>'+
+  '<span class="out">    <span class="c-magenta">return</span> <span class="c-cyan">f</span><span class="c-green">"Hello, {name}!"</span></span>'+
+  '<span class="row">'+prompt+'<span class="cursor"></span></span>';
+
+const grid = document.getElementById('grid');
+THEMES.forEach((t,i)=>{
+  const order=['black','red','green','yellow','blue','magenta','cyan','white'];
+  const base=order.map(c=>'<span style="background:'+t[c]+'"></span>').join('');
+  const bright=t.k.map(c=>'<span style="background:'+c+'"></span>').join('');
+  const vars='--bg:'+t.bg+';--fg:'+t.fg+';--red:'+t.red+';--green:'+t.green+
+    ';--yellow:'+t.yellow+';--blue:'+t.blue+';--magenta:'+t.magenta+
+    ';--cyan:'+t.cyan+';--brblack:'+t.k[0]+';';
+  const el=document.createElement('article');
+  el.className='card';
+  el.style.animationDelay=(0.36+i*0.09)+'s';
+  el.innerHTML=
+    '<div class="card-head"><h2>'+t.name+'</h2>'+
+      '<span class="idx">'+String(i+1).padStart(2,'0')+' / 08</span></div>'+
+    '<p class="blurb">'+t.blurb+'</p>'+
+    '<div class="term" style="'+vars+'">'+
+      '<div class="bar"><i></i><i></i><i></i><span>'+t.slug+' — zsh</span></div>'+
+      '<div class="screen">'+BODY+'</div>'+
+    '</div>'+
+    '<div class="swatches">'+base+bright+'</div>'+
+    '<div class="legend"><span>normal 0–7</span><span>bright 8–15</span></div>';
+  grid.appendChild(el);
+});
+</script>
+</body>
+</html>

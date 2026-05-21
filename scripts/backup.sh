@@ -7,6 +7,11 @@ set -euo pipefail
 backup_root="${1:-$HOME/.terminal-beauty-backups}"
 stamp="$(date +%Y%m%d-%H%M%S)"
 dest="$backup_root/$stamp"
+i=1
+while [ -e "$dest" ]; do
+  dest="$backup_root/$stamp-$i"
+  i=$((i + 1))
+done
 mkdir -p "$dest"
 manifest="$dest/manifest.txt"
 : > "$manifest"

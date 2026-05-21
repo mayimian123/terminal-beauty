@@ -34,3 +34,19 @@ teardown() { teardown_sandbox; }
   base="$(cut -f1 "$dest/manifest.txt" | head -1)"
   [ "$(cat "$dest/$base")" = "hello terminal" ]
 }
+
+@test "backup.sh creates a unique directory when called twice in one second" {
+  echo "original zshrc" > "$FAKE_HOME/.zshrc"
+
+  run env HOME="$FAKE_HOME" bash "$(scripts_dir)/backup.sh" "$SANDBOX/backups"
+  [ "$status" -eq 0 ]
+  first="$output"
+
+  run env HOME="$FAKE_HOME" bash "$(scripts_dir)/backup.sh" "$SANDBOX/backups"
+  [ "$status" -eq 0 ]
+  second="$output"
+
+  [ "$first" != "$second" ]
+  [ -d "$first" ]
+  [ -d "$second" ]
+}

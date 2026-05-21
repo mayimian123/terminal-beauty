@@ -29,6 +29,7 @@ while IFS=$'\t' read -r base src; do
   if [ "$src" = "defaults:com.googlecode.iterm2" ]; then
     defaults import com.googlecode.iterm2 "$backup_dir/$base"
   else
+    mkdir -p "$(dirname "$src")"
     rm -rf "$src"
     cp -R "$backup_dir/$base" "$src"
   fi
