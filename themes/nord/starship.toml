@@ -1,0 +1,35 @@
+# terminal-beauty: Nord
+add_newline = true
+
+format = """
+[](#81a1c1)\
+$directory\
+[](fg:#81a1c1 bg:#b48ead)\
+$git_branch\
+$git_status\
+[](fg:#b48ead bg:#4c566a)\
+$cmd_duration\
+[ ](fg:#4c566a)\
+$character"""
+
+[directory]
+style = "fg:#2e3440 bg:#81a1c1"
+format = "[ $path ]($style)"
+truncation_length = 3
+
+[git_branch]
+symbol = ""
+style = "fg:#2e3440 bg:#b48ead"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:#2e3440 bg:#b48ead"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+style = "fg:#d8dee9 bg:#4c566a"
+format = "[  $duration ]($style)"
+
+[character]
+success_symbol = "[❯](bold #a3be8c)"
+error_symbol = "[❯](bold #bf616a)"

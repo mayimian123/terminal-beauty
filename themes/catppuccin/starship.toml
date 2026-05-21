@@ -1,0 +1,35 @@
+# terminal-beauty: Catppuccin Mocha
+add_newline = true
+
+format = """
+[](#89b4fa)\
+$directory\
+[](fg:#89b4fa bg:#f5c2e7)\
+$git_branch\
+$git_status\
+[](fg:#f5c2e7 bg:#585b70)\
+$cmd_duration\
+[ ](fg:#585b70)\
+$character"""
+
+[directory]
+style = "fg:#1e1e2e bg:#89b4fa"
+format = "[ $path ]($style)"
+truncation_length = 3
+
+[git_branch]
+symbol = ""
+style = "fg:#1e1e2e bg:#f5c2e7"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "fg:#1e1e2e bg:#f5c2e7"
+format = "[$all_status$ahead_behind ]($style)"
+
+[cmd_duration]
+style = "fg:#cdd6f4 bg:#585b70"
+format = "[  $duration ]($style)"
+
+[character]
+success_symbol = "[❯](bold #a6e3a1)"
+error_symbol = "[❯](bold #f38ba8)"

@@ -1,0 +1,26 @@
+# Nord
+
+An arctic, north-bluish palette. Cool, desaturated, and quiet — suits people who want a calm, low-contrast workspace.
+
+## Palette
+
+| Role          | Hex     |
+|---------------|---------|
+| bg            | #2e3440 |
+| fg            | #d8dee9 |
+| black         | #3b4252 |
+| red           | #bf616a |
+| green         | #a3be8c |
+| yellow        | #ebcb8b |
+| blue          | #81a1c1 |
+| magenta       | #b48ead |
+| cyan          | #88c0d0 |
+| white         | #e5e9f0 |
+| bright black  | #4c566a |
+| bright red    | #bf616a |
+| bright green  | #a3be8c |
+| bright yellow | #ebcb8b |
+| bright blue   | #81a1c1 |
+| bright magenta| #b48ead |
+| bright cyan   | #8fbcbb |
+| bright white  | #eceff4 |
