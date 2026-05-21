@@ -66,9 +66,14 @@ esac
 
 THEME_DIR="$THEMES_DIR/$THEME_NAME"
 if [ ! -d "$THEME_DIR" ]; then
-  echo "Unknown theme: $THEME_NAME" >&2
-  usage >&2
-  exit 1
+  CUSTOM_THEME_DIR="$THEMES_DIR/_custom/$THEME_NAME"
+  if [ -d "$CUSTOM_THEME_DIR" ]; then
+    THEME_DIR="$CUSTOM_THEME_DIR"
+  else
+    echo "Unknown theme: $THEME_NAME" >&2
+    usage >&2
+    exit 1
+  fi
 fi
 
 BACKUP_DIR="$("$SCRIPT_DIR/backup.sh")"

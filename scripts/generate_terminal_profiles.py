@@ -97,9 +97,18 @@ def build_profile(slug: str, title: str, palette: dict[str, str]) -> dict[str, o
 
 
 def main() -> None:
-    for theme_dir in sorted(THEMES.iterdir()):
-        if not theme_dir.is_dir() or theme_dir.name.startswith("_"):
-            continue
+    theme_dirs = [
+        theme_dir
+        for theme_dir in sorted(THEMES.iterdir())
+        if theme_dir.is_dir() and not theme_dir.name.startswith("_")
+    ]
+    custom_root = THEMES / "_custom"
+    if custom_root.exists():
+        theme_dirs.extend(
+            theme_dir for theme_dir in sorted(custom_root.iterdir()) if theme_dir.is_dir()
+        )
+
+    for theme_dir in theme_dirs:
         title, palette = parse_theme(theme_dir / "theme.md")
         profile = build_profile(theme_dir.name, title, palette)
         output = theme_dir / f"{theme_dir.name}.terminal"

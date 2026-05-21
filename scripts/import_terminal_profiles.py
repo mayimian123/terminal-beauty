@@ -25,6 +25,18 @@ def curated_profiles() -> dict[str, dict[str, object]]:
         profile = plistlib.loads(profile_path.read_bytes())
         profile["name"] = theme_dir.name
         profiles[theme_dir.name] = profile
+
+    custom_root = THEMES / "_custom"
+    if custom_root.exists():
+        for theme_dir in sorted(custom_root.iterdir()):
+            if not theme_dir.is_dir():
+                continue
+            profile_path = theme_dir / f"{theme_dir.name}.terminal"
+            if not profile_path.exists():
+                continue
+            profile = plistlib.loads(profile_path.read_bytes())
+            profile["name"] = theme_dir.name
+            profiles[theme_dir.name] = profile
     return profiles
 
 

@@ -76,3 +76,18 @@ teardown() { teardown_sandbox; }
   ! grep -q 'Desktop/terminal-beauty/themes' "$FAKE_HOME/.zshrc"
   grep -q '.terminal-beauty/themes/catppuccin/zsh.sh' "$FAKE_HOME/.zshrc"
 }
+
+@test "install.sh can apply a custom theme by slug" {
+  custom="$BATS_TEST_DIRNAME/../themes/_custom/my-style"
+  mkdir -p "$custom"
+  cp "$BATS_TEST_DIRNAME/../themes/catppuccin/"* "$custom/"
+
+  run env HOME="$FAKE_HOME" TERM_PROGRAM=Apple_Terminal \
+    bash "$(scripts_dir)/install.sh" my-style
+  [ "$status" -eq 0 ]
+
+  [ -d "$FAKE_HOME/.terminal-beauty/themes/my-style" ]
+  grep -q 'terminal-beauty: my-style' "$FAKE_HOME/.zshrc"
+
+  rm -rf "$BATS_TEST_DIRNAME/../themes/_custom"
+}

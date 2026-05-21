@@ -65,6 +65,36 @@
   }
   .meta span b{color:#7aa2f7;font-weight:700}
 
+  /* ---------- custom builder ---------- */
+  .builder{
+    max-width:1280px;margin:0 auto 4rem;padding:0 2.5rem;
+  }
+  .builder-inner{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:2rem 0;
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.85fr);gap:2rem;
+  }
+  @media(max-width:980px){.builder-inner{grid-template-columns:1fr}}
+  .builder h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-size:2rem;letter-spacing:0;margin-bottom:.7rem;
+  }
+  .builder p{color:#9d9aa6;font-size:.86rem;line-height:1.8;max-width:68ch}
+  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8rem;margin-top:1.2rem}
+  @media(max-width:700px){.form-grid{grid-template-columns:1fr}}
+  label{display:grid;gap:.4rem;color:#b6b3bf;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+  input,select,textarea,button{
+    font:inherit;border:1px solid var(--line);border-radius:6px;background:#101017;color:var(--paper);
+  }
+  input,select{height:2.45rem;padding:0 .8rem}
+  textarea{
+    min-height:14rem;padding:1rem;resize:vertical;line-height:1.65;color:#d7d4df;
+  }
+  .builder-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}
+  button{cursor:pointer;padding:.68rem 1rem;background:#e9e6df;color:#0a0a0e;font-weight:700}
+  button.secondary{background:#101017;color:#d7d4df}
+  .builder-note{margin-top:.8rem;color:#76737f;font-size:.74rem}
+
   /* ---------- grid ---------- */
   .grid{
     max-width:1280px;margin:0 auto;padding:0 2.5rem;
@@ -191,6 +221,54 @@
   </div>
 </header>
 
+<section class="builder" id="custom">
+  <div class="builder-inner">
+    <div>
+      <h2>想要自己的风格？</h2>
+      <p>先在这里描述你想要的终端气质，页面会生成一段可以直接发给 Codex 的定制 brief。skill 会根据这段 brief 生成完整主题模板，再走同样的备份、安装和回滚流程。</p>
+      <div class="form-grid">
+        <label>基础参考
+          <select id="customBase"></select>
+        </label>
+        <label>明暗
+          <select id="customTone">
+            <option>深色</option>
+            <option>浅色</option>
+          </select>
+        </label>
+        <label>整体气质
+          <select id="customMood">
+            <option>安静、低对比、长时间护眼</option>
+            <option>高对比、清晰、适合演示</option>
+            <option>柔和粉彩、温柔、轻盈</option>
+            <option>复古暖调、低蓝光</option>
+            <option>霓虹、赛博、醒目</option>
+          </select>
+        </label>
+        <label>必须出现的颜色
+          <input id="customColors" placeholder="例如：墨绿、雾蓝、#ff7a90">
+        </label>
+        <label>主题名
+          <input id="customName" placeholder="例如：misty-green">
+        </label>
+        <label>额外偏好
+          <input id="customNotes" placeholder="例如：背景不要太黑，蓝色少一点">
+        </label>
+      </div>
+    </div>
+    <div>
+      <label>发给 skill 的 brief
+        <textarea id="customBrief" spellcheck="false"></textarea>
+      </label>
+      <div class="builder-actions">
+        <button id="copyBrief" type="button">复制 brief</button>
+        <button class="secondary" id="refreshBrief" type="button">重新生成</button>
+      </div>
+      <p class="builder-note">复制后在 Codex 里说：使用 terminal-beauty skill，然后粘贴这段 brief。</p>
+    </div>
+  </div>
+</section>
+
 <main class="grid" id="grid"></main>
 
 <footer>
@@ -276,6 +354,50 @@ THEMES.forEach((t,i)=>{
     '<div class="legend"><span>normal 0–7</span><span>bright 8–15</span></div>';
   grid.appendChild(el);
 });
+
+const baseSelect = document.getElementById('customBase');
+const briefBox = document.getElementById('customBrief');
+THEMES.forEach((theme)=>{
+  const option=document.createElement('option');
+  option.value=theme.slug;
+  option.textContent=theme.name;
+  baseSelect.appendChild(option);
+});
+
+function slugify(value){
+  return value.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'custom-terminal';
+}
+
+function updateBrief(){
+  const base=baseSelect.value;
+  const tone=document.getElementById('customTone').value;
+  const mood=document.getElementById('customMood').value;
+  const colors=document.getElementById('customColors').value.trim() || '无固定颜色';
+  const notes=document.getElementById('customNotes').value.trim() || '无';
+  const name=slugify(document.getElementById('customName').value || mood);
+  briefBox.value =
+`请使用 terminal-beauty skill 为我生成一个自定义 macOS 终端主题。
+
+主题 slug：${name}
+基础参考：${base}
+明暗：${tone}
+整体气质：${mood}
+必须出现的颜色：${colors}
+额外偏好：${notes}
+
+请生成完整主题模板到 themes/_custom/${name}/，包含 zsh、Starship、fish、iTerm2、Apple Terminal profile，然后应用到 Apple Terminal。应用前请先备份；如果我没有 Starship，请先说明它负责 prompt 效果并询问是否安装。`;
+}
+
+['customBase','customTone','customMood','customColors','customName','customNotes'].forEach((id)=>{
+  document.getElementById(id).addEventListener('input',updateBrief);
+});
+document.getElementById('refreshBrief').addEventListener('click',updateBrief);
+document.getElementById('copyBrief').addEventListener('click',async()=>{
+  await navigator.clipboard.writeText(briefBox.value);
+  document.getElementById('copyBrief').textContent='已复制';
+  setTimeout(()=>{document.getElementById('copyBrief').textContent='复制 brief'},1400);
+});
+updateBrief();
 </script>
 </body>
 </html>

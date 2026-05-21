@@ -43,7 +43,12 @@ everforest, solarized-dark.
 ### 3. Get the user's choice
 The user picks a curated theme, or describes a custom one. For a custom
 theme, follow `references/custom-theme-guide.md` to generate it into
-`themes/_custom/<slug>/`, then continue as if it were curated.
+`themes/_custom/<slug>/`.
+
+If the user pasted a custom brief from the gallery, treat the `主题 slug` as
+the custom theme slug. Generate the full theme directory, run
+`scripts/generate_terminal_profiles.py` so `<slug>.terminal` exists, then
+continue as if it were curated.
 
 ### 4. Apply with the installer
 Run `scripts/install.sh <theme-slug>`. The installer performs the mandatory
@@ -54,6 +59,9 @@ backup first, then applies the selected theme:
   when fish is installed.
 - **Apple Terminal**: copies `<theme-slug>.terminal` and prints import instructions.
 - **iTerm2**: copies the `.itermcolors` preset and prints import instructions.
+
+Custom themes in `themes/_custom/<theme-slug>/` are supported by the same
+installer command.
 
 If the user is on Apple Terminal, explain the split clearly:
 - Apple Terminal profiles control the window/background/ANSI color palette.

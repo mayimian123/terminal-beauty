@@ -20,6 +20,7 @@
 [30 秒上手](#30-秒上手) ·
 [它做了什么](#它做了什么) ·
 [Apple Terminal 和 Starship](#apple-terminal-和-starship) ·
+[自定义风格](#自定义风格) ·
 [安全与回滚](#安全与回滚) ·
 [English](#english)
 
@@ -45,7 +46,7 @@
 - `~/.zshrc`
 - `~/.config/starship.toml`
 - `~/.config/fish/conf.d/terminal-beauty.fish`
-- Apple Terminal 的 `.terminal` profile 需要手动确认导入
+- Apple Terminal profiles 可在用户同意后自动导入并设置默认
 - iTerm2 的 `.itermcolors` 主题文件可选导入
 
 安装脚本不会删除备份，也不会在没有明确同意的情况下安装新工具。
@@ -101,6 +102,22 @@ iTerm2 是可选路径，不是必需依赖。
 - **Installer**：只应用用户选中的主题，并且先备份
 
 这样使用 skill 时不需要在对话里展开一长串配色说明，也不需要用户一套套试。
+
+## 自定义风格
+
+主题预览页里有一个自定义 brief 生成器：
+
+[https://mayimian123.github.io/terminal-beauty/#custom](https://mayimian123.github.io/terminal-beauty/#custom)
+
+你可以选择基础参考、明暗、整体气质和必须出现的颜色。页面会生成一段可以直接发给 Codex 的 brief。
+
+skill 收到 brief 后会：
+
+1. 在 `themes/_custom/<主题名>/` 生成完整主题模板。
+2. 生成 Apple Terminal 原生 profile。
+3. 通过同一套安装流程备份、应用、导入 profiles。
+
+浏览器不会直接修改本地文件；真正落地仍由 skill 和本地脚本完成。
 
 ## 30 秒上手
 
@@ -205,6 +222,7 @@ terminal-beauty/
 ├── scripts/
 │   ├── detect.sh
 │   ├── backup.sh
+│   ├── doctor.sh
 │   ├── install.sh
 │   ├── import_terminal_profiles.py
 │   └── rollback.sh
@@ -221,6 +239,7 @@ terminal-beauty/
 - `SKILL.md`：给 Codex / Claude Code 读取的工作流说明。
 - `themes/*/<主题名>.terminal`：Apple Terminal 原生 profile。文件名会影响导入后在 Terminal 设置里显示的名称。
 - `scripts/import_terminal_profiles.py`：把全部 Apple Terminal profiles 写入 Terminal 设置，并可设置默认主题。
+- `scripts/doctor.sh`：检查 Starship、zsh hook、Apple Terminal 默认 profile、导入主题和最近备份。
 
 `index.html` 和 `demo/themes-preview.html` 不是重复文件。前者负责稳定入口，后者负责实际 gallery。以后重做预览页，只需要替换 `demo/themes-preview.html`。
 

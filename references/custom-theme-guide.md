@@ -20,7 +20,11 @@ Use this when the user wants a look not covered by the curated library
    `themes/_custom/<slug>/`, following `references/theme-format.md`
    exactly — the same structure as `themes/tokyo-night/`.
 
-4. **Apply it** through the normal workflow in SKILL.md (backup first).
+4. **Generate Apple Terminal profile data.** Run
+   `scripts/generate_terminal_profiles.py` after writing `theme.md` so the
+   custom directory gets `<slug>.terminal`.
+
+5. **Apply it** through the normal workflow in SKILL.md (backup first).
 
 ## Notes
 - `themes/_custom/` is git-ignored and may be overwritten freely.
