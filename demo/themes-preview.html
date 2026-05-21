@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>terminal-beauty · 主题预览</title>
+<title>Terminal Beauty · macOS terminal themes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -73,7 +73,7 @@
     border-top:1px solid var(--line);
     border-bottom:1px solid var(--line);
     padding:2rem 0;
-    display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.85fr);gap:2rem;
+    display:grid;grid-template-columns:minmax(0,.95fr) minmax(380px,1.05fr);gap:2rem;
   }
   @media(max-width:980px){.builder-inner{grid-template-columns:1fr}}
   .builder h2{
@@ -88,12 +88,14 @@
   }
   input,select{height:2.45rem;padding:0 .8rem}
   textarea{
-    min-height:14rem;padding:1rem;resize:vertical;line-height:1.65;color:#d7d4df;
+    min-height:11rem;padding:1rem;resize:vertical;line-height:1.65;color:#d7d4df;
   }
   .builder-actions{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1rem}
   button{cursor:pointer;padding:.68rem 1rem;background:#e9e6df;color:#0a0a0e;font-weight:700}
   button.secondary{background:#101017;color:#d7d4df}
   .builder-note{margin-top:.8rem;color:#76737f;font-size:.74rem}
+  .custom-preview{margin-bottom:1.1rem}
+  .custom-preview .term{box-shadow:0 24px 58px -25px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.06)}
 
   /* ---------- grid ---------- */
   .grid{
@@ -211,21 +213,21 @@
 <body>
 
 <header class="top">
-  <div class="eyebrow">terminal-beauty · macOS 主题库</div>
-  <h1><span class="thin">让你的终端</span><em>变好看</em></h1>
-  <p class="lede">terminal-beauty 内置 8 套经社区验证的精选配色，每套都为 zsh、Starship、iTerm2、fish 调好。下面是同一段终端会话在 8 套主题下的真实渲染——配色取自各主题的 18 色调色板。</p>
+  <div class="eyebrow">Terminal Beauty · macOS theme skill</div>
+  <h1><span class="thin">Terminal</span><em>Beauty</em></h1>
+  <p class="lede">一个面向 macOS 的终端主题 skill：先可视化选择或定制风格，再安全应用到 Apple Terminal、Starship、zsh、fish 和 iTerm2。每次应用前自动备份，随时可以回滚。</p>
   <div class="meta">
     <span><b>8</b> 套精选主题</span>
-    <span><b>4</b> 个工具适配</span>
-    <span>检测 · 备份 · 一键回滚</span>
+    <span><b>Apple Terminal</b> 默认支持</span>
+    <span>自定义 · 备份 · 回滚</span>
   </div>
 </header>
 
 <section class="builder" id="custom">
   <div class="builder-inner">
     <div>
-      <h2>想要自己的风格？</h2>
-      <p>先在这里描述你想要的终端气质，页面会生成一段可以直接发给 Codex 的定制 brief。skill 会根据这段 brief 生成完整主题模板，再走同样的备份、安装和回滚流程。</p>
+      <h2>定制你的风格</h2>
+      <p>在页面里先调出一个大致方向，右侧会实时预览终端效果，并生成一段可以直接发给 Codex 的 brief。真正写入本地配置时，仍然由 skill 负责生成完整模板、备份和安装。</p>
       <div class="form-grid">
         <label>基础参考
           <select id="customBase"></select>
@@ -257,6 +259,7 @@
       </div>
     </div>
     <div>
+      <div class="custom-preview" id="customPreview"></div>
       <label>发给 skill 的 brief
         <textarea id="customBrief" spellcheck="false"></textarea>
       </label>
@@ -272,8 +275,8 @@
 <main class="grid" id="grid"></main>
 
 <footer>
-  <b>terminal-beauty</b> · 触发方式：对 Claude Code 说「美化我的 terminal」<br>
-  支持精选主题与按描述定制生成 · 应用前自动备份，随时可回滚
+  <b>Terminal Beauty</b> · 对 Codex 说「使用 terminal-beauty skill」<br>
+  支持精选主题与自定义风格 · Apple Terminal 优先 · 应用前自动备份，随时可回滚
 </footer>
 
 <script>
@@ -357,6 +360,7 @@ THEMES.forEach((t,i)=>{
 
 const baseSelect = document.getElementById('customBase');
 const briefBox = document.getElementById('customBrief');
+const customPreview = document.getElementById('customPreview');
 THEMES.forEach((theme)=>{
   const option=document.createElement('option');
   option.value=theme.slug;
@@ -368,6 +372,107 @@ function slugify(value){
   return value.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'custom-terminal';
 }
 
+function hexToRgb(hex){
+  const clean=hex.replace('#','');
+  return {
+    r:parseInt(clean.slice(0,2),16),
+    g:parseInt(clean.slice(2,4),16),
+    b:parseInt(clean.slice(4,6),16)
+  };
+}
+
+function rgbToHex({r,g,b}){
+  return '#'+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')).join('');
+}
+
+function mix(a,b,amount){
+  const ca=hexToRgb(a), cb=hexToRgb(b);
+  return rgbToHex({
+    r:ca.r+(cb.r-ca.r)*amount,
+    g:ca.g+(cb.g-ca.g)*amount,
+    b:ca.b+(cb.b-ca.b)*amount
+  });
+}
+
+function colorFromWords(words,tone){
+  const text=words.toLowerCase();
+  if(text.includes('#')){
+    const found=text.match(/#[0-9a-f]{6}/i);
+    if(found) return found[0];
+  }
+  if(/绿|green/.test(text)) return tone==='浅色' ? '#4f8f6f' : '#8fbc8f';
+  if(/蓝|blue/.test(text)) return tone==='浅色' ? '#3b73b9' : '#7aa2f7';
+  if(/紫|purple|violet/.test(text)) return tone==='浅色' ? '#7b5fc6' : '#bb9af7';
+  if(/粉|玫|pink|rose/.test(text)) return tone==='浅色' ? '#c35f8d' : '#f5a4c7';
+  if(/橙|orange/.test(text)) return tone==='浅色' ? '#b66b2d' : '#e0af68';
+  if(/黄|gold|yellow/.test(text)) return tone==='浅色' ? '#9b7a1d' : '#e6c384';
+  return '';
+}
+
+function buildCustomTheme(){
+  const base=THEMES.find(t=>t.slug===baseSelect.value) || THEMES[0];
+  const tone=document.getElementById('customTone').value;
+  const mood=document.getElementById('customMood').value;
+  const colors=document.getElementById('customColors').value.trim();
+  const accent=colorFromWords(colors,tone);
+  const theme={...base,k:[...base.k]};
+
+  if(tone==='浅色'){
+    theme.bg=mix(base.fg,'#ffffff',0.8);
+    theme.fg=mix(base.bg,'#000000',0.55);
+    theme.black=mix(theme.bg,'#000000',0.12);
+    theme.white=mix(theme.fg,'#ffffff',0.68);
+    theme.k[0]=mix(theme.bg,'#000000',0.28);
+    theme.k[7]=theme.fg;
+  }
+  if(mood.includes('高对比')){
+    theme.bg=mix(theme.bg,'#000000',0.22);
+    theme.fg=mix(theme.fg,'#ffffff',0.2);
+    theme.k[0]=mix(theme.bg,'#ffffff',0.28);
+  }
+  if(mood.includes('复古')){
+    theme.bg=mix(theme.bg,'#3a2a1d',0.32);
+    theme.yellow=accent || '#d8a657';
+    theme.blue=mix(theme.blue,'#5f819d',0.45);
+  }
+  if(mood.includes('霓虹')){
+    theme.bg=mix(theme.bg,'#050611',0.45);
+    theme.cyan=accent || '#00e5ff';
+    theme.magenta='#ff4fd8';
+    theme.green='#7cff6b';
+  }
+  if(mood.includes('柔和')){
+    theme.bg=mix(theme.bg,'#27233a',0.18);
+    theme.red=mix(theme.red,'#ffd6e7',0.35);
+    theme.blue=mix(theme.blue,'#c8ddff',0.28);
+    theme.magenta=accent || mix(theme.magenta,'#ffd6f3',0.3);
+  }
+  if(accent){
+    theme.blue=accent;
+    theme.cyan=mix(accent,'#a7fff1',0.38);
+    theme.k[4]=mix(accent,'#ffffff',0.22);
+    theme.k[6]=mix(theme.cyan,'#ffffff',0.18);
+  }
+
+  return theme;
+}
+
+function renderCustomPreview(theme,name){
+  const order=['black','red','green','yellow','blue','magenta','cyan','white'];
+  const base=order.map(c=>'<span style="background:'+theme[c]+'"></span>').join('');
+  const bright=theme.k.map(c=>'<span style="background:'+c+'"></span>').join('');
+  const vars='--bg:'+theme.bg+';--fg:'+theme.fg+';--red:'+theme.red+';--green:'+theme.green+
+    ';--yellow:'+theme.yellow+';--blue:'+theme.blue+';--magenta:'+theme.magenta+
+    ';--cyan:'+theme.cyan+';--brblack:'+theme.k[0]+';';
+  customPreview.innerHTML=
+    '<div class="term" style="'+vars+'">'+
+      '<div class="bar"><i></i><i></i><i></i><span>'+name+' — preview</span></div>'+
+      '<div class="screen">'+BODY+'</div>'+
+    '</div>'+
+    '<div class="swatches">'+base+bright+'</div>'+
+    '<div class="legend"><span>normal 0–7</span><span>bright 8–15</span></div>';
+}
+
 function updateBrief(){
   const base=baseSelect.value;
   const tone=document.getElementById('customTone').value;
@@ -375,6 +480,8 @@ function updateBrief(){
   const colors=document.getElementById('customColors').value.trim() || '无固定颜色';
   const notes=document.getElementById('customNotes').value.trim() || '无';
   const name=slugify(document.getElementById('customName').value || mood);
+  const previewTheme=buildCustomTheme();
+  renderCustomPreview(previewTheme,name);
   briefBox.value =
 `请使用 terminal-beauty skill 为我生成一个自定义 macOS 终端主题。
 
