@@ -29,6 +29,24 @@ teardown() { teardown_sandbox; }
   [ "$(cat "$FAKE_HOME/.zshrc")" = "restored content" ]
 }
 
+@test "rollback.sh accepts Apple Terminal defaults manifest entries" {
+  bdir="$SANDBOX/backups/20260101-120000"
+  bin="$SANDBOX/bin"
+  mkdir -p "$bdir"
+  mkdir -p "$bin"
+  cat > "$bin/defaults" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >> "$SANDBOX/defaults-calls"
+EOF
+  chmod +x "$bin/defaults"
+  echo "plist" > "$bdir/apple-terminal.plist"
+  printf '%s\t%s\n' "apple-terminal.plist" "defaults:com.apple.Terminal" > "$bdir/manifest.txt"
+
+  run env HOME="$FAKE_HOME" SANDBOX="$SANDBOX" PATH="$bin:$PATH" bash "$(scripts_dir)/rollback.sh" "$bdir"
+  [ "$status" -eq 0 ]
+  grep -q "import com.apple.Terminal" "$SANDBOX/defaults-calls"
+}
+
 @test "rollback.sh fails when the manifest is missing" {
   bdir="$SANDBOX/backups/empty"
   mkdir -p "$bdir"

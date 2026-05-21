@@ -28,6 +28,8 @@ while IFS=$'\t' read -r base src; do
   [ -z "$base" ] && continue
   if [ "$src" = "defaults:com.googlecode.iterm2" ]; then
     defaults import com.googlecode.iterm2 "$backup_dir/$base"
+  elif [ "$src" = "defaults:com.apple.Terminal" ]; then
+    defaults import com.apple.Terminal "$backup_dir/$base"
   else
     mkdir -p "$(dirname "$src")"
     rm -rf "$src"

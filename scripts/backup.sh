@@ -34,4 +34,9 @@ if defaults read com.googlecode.iterm2 >/dev/null 2>&1; then
   printf '%s\t%s\n' "iterm2.plist" "defaults:com.googlecode.iterm2" >> "$manifest"
 fi
 
+if defaults read com.apple.Terminal >/dev/null 2>&1; then
+  defaults export com.apple.Terminal "$dest/apple-terminal.plist"
+  printf '%s\t%s\n' "apple-terminal.plist" "defaults:com.apple.Terminal" >> "$manifest"
+fi
+
 echo "$dest"
