@@ -1,11 +1,11 @@
 ---
 name: terminal-beauty
-description: Use when the user wants to make their macOS terminal look better — beautify, restyle, or theme their terminal. Triggers on "美化我的 terminal", "terminal 太丑了", "换个 terminal 主题", "帮我配置 terminal 外观", "make my terminal pretty", "customize my terminal", "terminal theme". Directs the user to a visual theme gallery, applies the selected curated or custom theme, and supports safe rollback.
+description: Use when the user wants to experiment with macOS Apple Terminal theming through a visual, reversible setup flow. Triggers on "美化我的 terminal", "terminal 太丑了", "换个 terminal 主题", "帮我配置 terminal 外观", "make my terminal pretty", "customize my terminal", "terminal theme". Directs the user to a visual theme gallery, applies the selected curated or custom theme, and supports safe rollback.
 ---
 
 # terminal-beauty
 
-Beautify the user's macOS terminal by applying a color theme to Apple
+Experiment with macOS terminal theming by applying a color theme to Apple
 Terminal, zsh, Starship, iTerm2, and/or fish — with a guaranteed-safe backup
 and rollback path.
 

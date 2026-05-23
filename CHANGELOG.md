@@ -2,7 +2,9 @@
 
 ## v1.0.0-beta.1
 
-First beta release of Terminal Beauty.
+First beta release of Terminal Beauty. This version is now treated as an
+experiment in visual, reversible Apple Terminal theming rather than a broad
+terminal replacement project.
 
 ### Added
 

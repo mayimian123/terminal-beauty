@@ -4,9 +4,9 @@
 
 > “先看到真实效果，再决定要不要把它装进自己的终端。”
 
-一个面向 macOS 的终端主题 skill，把「看主题 → 选主题 → 备份 → 应用 → 可回滚」做成一条顺滑流程。
+一个面向 macOS 原生 Terminal 的主题配置实验，把「看主题 → 选主题 → 备份 → 应用 → 可回滚」做成一条可复用的本地设置流程。
 
-它不是一个单纯的配色仓库，而是一个给 Codex / Claude Code 使用的 skill：
+它不是一个新终端，也不是要替代 Warp / iTerm2。它更像一个给 Codex / Claude Code 使用的 workflow prototype：
 先让用户在网页里可视化选择主题，再由本地脚本安全地应用到 Apple Terminal、zsh、Starship、fish 和 iTerm2。
 
 <p>
@@ -18,7 +18,7 @@
 
 [主题预览](https://mayimian123.github.io/terminal-beauty/) ·
 [30 秒上手](#30-秒上手) ·
-[Beta 说明](#beta-说明) ·
+[项目状态](#项目状态) ·
 [它做了什么](#它做了什么) ·
 [Apple Terminal 和 Starship](#apple-terminal-和-starship) ·
 [自定义风格](#自定义风格) ·
@@ -56,11 +56,21 @@
 
 ---
 
-## Beta 说明
+## 项目状态
 
-当前版本是 `v1.0.0-beta.1`，建议先给熟悉 macOS 的朋友小范围试用。
+当前版本停在 `v1.0.0-beta.1`，定位为一个 **Apple Terminal theming workflow experiment**。
 
-V1 beta 聚焦：
+这个项目验证的不是“Apple Terminal 有什么隐藏超能力”，而是：
+
+```text
+视觉选择网页 -> 本地 skill 执行 -> 自动备份 -> 写入配置 -> 可回滚
+```
+
+这套模式对 Terminal 主题配置是可行的，但如果你的日常需求只是“更现代、更好看的终端体验”，Warp 这类现代终端可能已经是更省心的选择。
+
+这个仓库会保留为实验沉淀版。它仍然可用，但暂时不继续扩展为更大的终端产品。
+
+当前能力：
 
 - Apple Terminal 默认路径
 - Starship prompt
@@ -69,8 +79,6 @@ V1 beta 聚焦：
 - 自动备份、自动导入、可回滚
 
 暂不覆盖 Windows、VS Code terminal、Warp、Alacritty、云同步或网页直接修改本地配置。
-
-给朋友试用可以直接发：[TRY.md](TRY.md)
 
 ---
 
@@ -227,7 +235,7 @@ Startup Window Settings
 7. 如果用户同意，执行 `scripts/install.sh --import-terminal-profiles <theme>`，一次性导入全部 Apple Terminal 主题并设置默认。
 8. 如果用户偏好手动导入，再打开 `<theme>.terminal`。
 
-这个 skill 的重点是让用户更快做出视觉选择，同时保留安全回滚路径。
+这个 skill 的重点是验证“可视化选择 + 本地安全执行”的流程，同时保留安全回滚路径。
 
 ## 项目结构
 
