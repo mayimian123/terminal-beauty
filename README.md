@@ -2,6 +2,305 @@
 
 # Terminal Beauty
 
+> “See the real result first, then decide whether to install it in your terminal.”
+
+A theme-configuration experiment for the native macOS Terminal that turns “preview → choose → back up → apply → roll back” into a reusable local setup workflow.
+
+It is not a new terminal and is not intended to replace Warp or iTerm2. It is closer to a workflow prototype for Codex / Claude Code:
+first let users choose a theme visually on the web, then use local scripts to apply it safely to Apple Terminal, zsh, Starship, fish, and iTerm2.
+
+<p>
+  <img alt="macOS" src="https://img.shields.io/badge/macOS-focused-111827?style=flat-square">
+  <img alt="Shell" src="https://img.shields.io/badge/shell-zsh%20%7C%20fish-2563eb?style=flat-square">
+  <img alt="Themes" src="https://img.shields.io/badge/themes-8-7c3aed?style=flat-square">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-bats-059669?style=flat-square">
+</p>
+
+[English](#english) ·
+[中文](#中文) ·
+[Theme Gallery](https://mayimian123.github.io/terminal-beauty/) ·
+[30-Second Start](#30-second-start) ·
+[Project Status](#project-status) ·
+[What It Does](#what-it-does) ·
+[Apple Terminal and Starship](#apple-terminal-and-starship) ·
+[Custom Styles](#custom-styles) ·
+[Safety and Rollback](#safety-and-rollback)
+
+</div>
+
+<a id="english"></a>
+
+---
+
+![terminal-beauty theme preview](demo/themes-preview.png)
+
+---
+
+<details>
+<summary><strong>Read before use: which local settings does this project modify?</strong></summary>
+
+The installer automatically creates a backup before applying a theme. Backups are stored at:
+
+```bash
+~/.terminal-beauty-backups/
+```
+
+It then modifies the following files according to your environment:
+
+- `~/.zshrc`
+- `~/.config/starship.toml`
+- `~/.config/fish/conf.d/terminal-beauty.fish`
+- Apple Terminal profiles can be imported automatically and set as defaults with the user's consent
+- iTerm2 `.itermcolors` theme files can be imported optionally
+
+The installer never deletes backups or installs new tools without explicit consent.
+
+</details>
+
+---
+
+## Project Status
+
+The current version is `v1.0.0-beta.1` and is positioned as an **Apple Terminal theming workflow experiment**.
+
+This project is not trying to prove that Apple Terminal has hidden superpowers. It validates this flow:
+
+```text
+visual selection page -> local skill execution -> automatic backup -> write configuration -> rollback available
+```
+
+This approach works for Terminal theme configuration. However, if your everyday need is simply “a more modern, better-looking terminal experience,” a modern terminal such as Warp may already be the easier option.
+
+This repository will remain as an archived experiment. It still works, but there are currently no plans to expand it into a larger terminal product.
+
+Current capabilities:
+
+- Apple Terminal as the default path
+- Starship prompt
+- 8 curated themes
+- Custom style brief
+- Automatic backup, automatic import, and rollback
+
+Windows, VS Code terminal, Warp, Alacritty, cloud sync, and direct browser modification of local configuration are currently out of scope.
+
+---
+
+## What It Does
+
+It replaces “reading theme descriptions in chat, choosing blindly, and repeatedly trying themes” with “preview the result first, then install the one you selected.”
+
+The core flow is:
+
+```text
+open theme gallery -> choose a theme name -> automatic backup -> apply theme -> roll back if you do not like it
+```
+
+It currently supports:
+
+- zsh: writes one Terminal Beauty-managed theme configuration line
+- Starship: replaces `starship.toml`
+- fish: writes fish startup configuration
+- Apple Terminal: generates an importable `.terminal` profile
+- iTerm2: provides an importable `.itermcolors` color preset
+
+## Apple Terminal and Starship
+
+If you use the built-in macOS Terminal, you do not need to install iTerm2 for this project.
+
+The visual result has two layers:
+
+- **Apple Terminal Profile**: controls the window background, text, cursor, and base 16 colors.
+- **Starship**: controls the command-line prompt, including segmented styles for the directory, git branch, and execution time.
+
+Apple Terminal + Starship can therefore reproduce the most visible advanced prompt effects in the preview. The generated Apple Terminal profile controls the window colors.
+
+Install Starship:
+
+```bash
+brew install starship
+```
+
+iTerm2 is an optional path, not a required dependency.
+
+## Why Not Just Provide Eight Templates?
+
+A terminal theme is a visual decision. Theme names and color codes alone make it difficult to judge whether a theme will feel comfortable in a real terminal.
+
+The repository is therefore split into two layers:
+
+- **Gallery**: lets users see realistic terminal previews first
+- **Installer**: applies only the selected theme and creates a backup first
+
+When the project is used as a skill, this avoids expanding a long list of color descriptions in the conversation and prevents users from having to test each theme one by one.
+
+## Custom Styles
+
+The theme gallery includes a custom brief generator:
+
+[https://mayimian123.github.io/terminal-beauty/#custom](https://mayimian123.github.io/terminal-beauty/#custom)
+
+You can select a base reference, light or dark mode, overall mood, and required colors. The page generates a brief that can be sent directly to Codex.
+
+After receiving the brief, the skill will:
+
+1. Generate a complete theme template under `themes/_custom/<theme-name>/`.
+2. Generate a native Apple Terminal profile.
+3. Use the same installation flow to back up, apply, and import profiles.
+
+The browser never modifies local files directly; the skill and local scripts still perform the actual changes.
+
+## 30-Second Start
+
+First, open the theme gallery:
+
+[https://mayimian123.github.io/terminal-beauty/](https://mayimian123.github.io/terminal-beauty/)
+
+Choose a theme name, such as `tokyo-night`, then run this from the repository root:
+
+```bash
+scripts/install.sh tokyo-night
+```
+
+If you have already decided to open the Apple Terminal profile import window immediately, run:
+
+```bash
+scripts/install.sh --open-terminal-profile tokyo-night
+```
+
+For the simplest setup, import all Apple Terminal themes at once and set the current theme as the default:
+
+```bash
+scripts/install.sh --import-terminal-profiles tokyo-night
+```
+
+You can then filter and switch among all Terminal Beauty themes directly in Terminal settings.
+
+Open a new terminal tab or reload zsh:
+
+```bash
+source ~/.zshrc
+```
+
+Available themes:
+
+```text
+tokyo-night
+dracula
+nord
+catppuccin
+gruvbox
+rose-pine
+everforest
+solarized-dark
+```
+
+## Safety and Rollback
+
+List existing backups:
+
+```bash
+scripts/rollback.sh
+```
+
+Restore a backup:
+
+```bash
+scripts/rollback.sh ~/.terminal-beauty-backups/<timestamp>
+```
+
+If you try several themes in succession, `install.sh` replaces the previous managed zsh configuration instead of endlessly appending lines to `.zshrc`.
+
+After importing an Apple Terminal profile, select it here:
+
+```text
+Terminal > Settings > Profiles
+```
+
+If you used `--import-terminal-profiles`, the script automatically sets:
+
+```text
+Default Window Settings
+Startup Window Settings
+```
+
+New Terminal windows should then open with the selected theme. Existing windows do not change color automatically and must be reopened.
+
+## Using It as a Skill
+
+When a user says “beautify my terminal,” the assistant should:
+
+1. Detect the user's macOS terminal environment.
+2. Share the theme gallery instead of listing every color preset in chat.
+3. Ask the user to choose a theme name.
+4. If the user wants the prompt effect shown in the previews, install Starship after confirmation.
+5. Run `scripts/install.sh <theme>`.
+6. Tell the user where the backup was stored.
+7. With the user's consent, run `scripts/install.sh --import-terminal-profiles <theme>` to import all Apple Terminal themes and set the default.
+8. If the user prefers manual import, open `<theme>.terminal` instead.
+
+The skill is designed to validate a “visual selection + safe local execution” flow while preserving a safe rollback path.
+
+## Project Structure
+
+```text
+terminal-beauty/
+├── SKILL.md
+├── index.html
+├── demo/
+│   ├── themes-preview.html
+│   └── themes-preview.png
+├── scripts/
+│   ├── detect.sh
+│   ├── backup.sh
+│   ├── doctor.sh
+│   ├── install.sh
+│   ├── import_terminal_profiles.py
+│   └── rollback.sh
+├── themes/
+├── references/
+└── tests/
+```
+
+Files that are easy to confuse:
+
+- `index.html`: the GitHub Pages entry point that keeps the public URL clean.
+- `demo/themes-preview.html`: the actual theme gallery.
+- `demo/themes-preview.png`: the static preview shown in this README.
+- `SKILL.md`: workflow instructions for Codex / Claude Code.
+- `themes/*/<theme-name>.terminal`: native Apple Terminal profiles. The filename determines the name shown in Terminal settings after import.
+- `scripts/import_terminal_profiles.py`: writes all Apple Terminal profiles into Terminal settings and can set the default theme.
+- `scripts/doctor.sh`: checks Starship, the zsh hook, the default Apple Terminal profile, imported themes, and the latest backup.
+
+`index.html` and `demo/themes-preview.html` are not duplicates. The former provides a stable entry point; the latter is the actual gallery. A future gallery redesign only needs to replace `demo/themes-preview.html`.
+
+## Development
+
+Run tests:
+
+```bash
+bats tests
+```
+
+Check shell syntax:
+
+```bash
+bash -n scripts/*.sh
+```
+
+## Scope
+
+The current version explicitly targets macOS, supports Apple Terminal by default, focuses on zsh, Starship, and fish, and retains an optional iTerm2 path.
+
+Windows Terminal, PowerShell, WSL, Warp, Alacritty, and the VS Code integrated terminal can be supported later, but they are intentionally excluded from the first version to keep the core experience focused.
+
+---
+
+<a id="中文"></a>
+
+<div align="center">
+
+# Terminal Beauty
+
 > “先看到真实效果，再决定要不要把它装进自己的终端。”
 
 一个面向 macOS 原生 Terminal 的主题配置实验，把「看主题 → 选主题 → 备份 → 应用 → 可回滚」做成一条可复用的本地设置流程。
@@ -23,7 +322,8 @@
 [Apple Terminal 和 Starship](#apple-terminal-和-starship) ·
 [自定义风格](#自定义风格) ·
 [安全与回滚](#安全与回滚) ·
-[English](#english)
+[English](#english) ·
+[中文](#中文)
 
 </div>
 
@@ -289,53 +589,3 @@ bash -n scripts/*.sh
 当前版本明确面向 macOS，默认支持 Apple Terminal，重点支持 zsh、Starship、fish，也保留 iTerm2 可选路径。
 
 Windows Terminal、PowerShell、WSL、Warp、Alacritty、VS Code 集成终端等可以以后再扩展，但不放进第一版，避免把核心体验做复杂。
-
----
-
-## English
-
-`terminal-beauty` is a macOS-first terminal theme skill and installer for Apple
-Terminal, zsh, Starship, fish, and iTerm2.
-
-It is designed around a visual-first flow:
-
-```text
-preview themes -> choose a theme name -> back up current config -> apply theme -> roll back if needed
-```
-
-Open the gallery:
-
-[https://mayimian123.github.io/terminal-beauty/](https://mayimian123.github.io/terminal-beauty/)
-
-Install a theme:
-
-```bash
-scripts/install.sh tokyo-night
-```
-
-The installer creates a backup under:
-
-```bash
-~/.terminal-beauty-backups/
-```
-
-Then it applies the selected theme where supported:
-
-- zsh: appends one managed source line to `~/.zshrc`
-- Starship: writes `~/.config/starship.toml`
-- fish: writes `~/.config/fish/conf.d/terminal-beauty.fish` when fish is installed
-- Apple Terminal: copies a native `.terminal` profile and prints import instructions
-- iTerm2: copies the `.itermcolors` preset and prints import instructions
-
-On Apple Terminal, Starship provides the rich prompt style. Terminal window
-colors are controlled by the generated Apple Terminal profile.
-
-Rollback:
-
-```bash
-scripts/rollback.sh
-scripts/rollback.sh ~/.terminal-beauty-backups/<timestamp>
-```
-
-This project intentionally targets macOS first. Other terminal environments can
-be supported later, but they are outside the first version.
